@@ -1,0 +1,25 @@
+title: Joseph Noonan 
+description: Portfolio and Projects 
+url: https://noonan-portfolio.github.io
+remote_theme: mmistakes/minimal-mistakes
+plugins:
+  - jekyll-include-cache
+  - jekyll-feed
+  - jekyll-sitemap
+
+
+#Minimal Mistakes 
+locale: en
+minimal_mistakes_skin: default
+markdown: kramdown
+
+#navigation 
+nav:
+  - title: "Home"
+  url: /
+  - title: "Projects"
+  url: /projects/
+  - title: "About"
+  url: /about/
+
+  
