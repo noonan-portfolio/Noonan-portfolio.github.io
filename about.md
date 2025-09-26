@@ -5,7 +5,7 @@ title: "About"
 permalink: /about/
 ---
 
-## About Me 
+# About Me 
 Hi, I'm Joe 
 I'm someone who enjoys leearning building and finding better ways to solve problems. I love spending time outdoors in my free time. 
 
