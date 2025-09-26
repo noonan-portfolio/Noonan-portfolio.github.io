@@ -1,6 +1,6 @@
-title: Joseph Noonan 
-description: Portfolio and Projects 
-url: https://noonan-portfolio.github.io
+title: "Joseph Noonan" 
+description: "Portfolio and Projects"
+url: "https://noonan-portfolio.github.io"
 baseurl: ""
 
 remote_theme: mmistakes/minimal-mistakes
