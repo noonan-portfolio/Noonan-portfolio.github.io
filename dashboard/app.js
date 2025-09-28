@@ -13,7 +13,7 @@
 // 2) Recent GitHub activity (public)
 (async function loadGitHub() {
   const out = document.getElementById('ghOut');
-  const user = 'YOUR_GITHUB_USERNAME';
+  const user = 'Noonan-portfolio';
   try {
     const events = await fetch(`https://api.github.com/users/${user}/events/public`).then(r => r.json());
     (events || []).slice(0, 10).forEach(ev => {
