@@ -1,1 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Remote Work Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main>
+    <h1>Remote Work Dashboard</h1>
 
+    <section id="weather"><h2>Weather</h2><div class="card"><div id="weatherOut">Loading…</div></div></section>
+    <section id="github"><h2>My GitHub Activity</h2><div class="card"><ul id="ghOut"></ul></div></section>
+    <section id="calendar"><h2>Public Calendar</h2><div class="card"><ul id="calOut"></ul></div></section>
+    <section id="todos"><h2>Todos</h2>
+      <div class="card">
+        <form id="todoForm"><input id="todoInput" placeholder="Add task…" /><button>Add</button></form>
+        <ul id="todoList"></ul>
+      </div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
