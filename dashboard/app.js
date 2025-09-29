@@ -29,7 +29,7 @@
 // 3) Public ICS calendar (paste your ICS URL below)
 (async function loadCalendar() {
   const out = document.getElementById('calOut');
-  const ICS_URL = 'https://calendar.google.com/calendar/ical/your_calendar_id/basic.ics'; // <- replace
+  const ICS_URL = './calendar.ics'; // now fetches from your repo
   try {
     const ics = await fetch(ICS_URL).then(r => r.text());
     const items = [];
@@ -37,9 +37,13 @@
       if (line.startsWith('SUMMARY:')) items.push({ summary: line.slice(8) });
     });
     items.slice(0, 10).forEach(i => {
-      const li = document.createElement('li'); li.textContent = i.summary; out.appendChild(li);
+      const li = document.createElement('li');
+      li.textContent = i.summary;
+      out.appendChild(li);
     });
-  } catch (e) { out.innerHTML = '<li>Calendar unavailable.</li>'; }
+  } catch (e) {
+    out.innerHTML = '<li>Calendar unavailable.</li>';
+  }
 })();
 
 // 4) LocalStorage Todos
