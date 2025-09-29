@@ -29,7 +29,7 @@
 // 3) Public ICS calendar (paste your ICS URL below)
 (async function loadCalendar() {
   const out = document.getElementById('calOut');
-  const ICS_URL = 'https://calendar.google.com/calendar/ical/.../basic.ics'; // <- replace
+  const ICS_URL = 'https://calendar.google.com/calendar/ical/your_calendar_id/basic.ics'; // <- replace
   try {
     const ics = await fetch(ICS_URL).then(r => r.text());
     const items = [];
