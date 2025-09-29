@@ -1,13 +1,42 @@
-// 1) Weather via Open-Meteo (no key). Uses user’s approximate lat/lon via ipapi fallback-free endpoint.
+// 1) Weather for a fixed city (Milwaukee) + icon
 (async function loadWeather() {
   const out = document.getElementById('weatherOut');
+
+  // Milwaukee, WI
+  const CITY = 'Milwaukee';
+  const LAT = 43.0389;
+  const LON = -87.9065;
+
+  // Ask Open-Meteo for temperature, wind, and weather_code (used for icons)
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,wind_speed_10m,weather_code`;
+
+  // Map Open-Meteo weather codes → emoji icon
+  const ICON = {
+    0: "☀️",        // clear
+    1: "🌤️", 2: "🌤️", 3: "☁️",
+    45: "🌫️", 48: "🌫️",
+    51: "🌦️", 53: "🌦️", 55: "🌧️",
+    56: "🌧️", 57: "🌧️",
+    61: "🌧️", 63: "🌧️", 65: "🌧️",
+    66: "🌧️", 67: "🌧️",
+    71: "🌨️", 73: "🌨️", 75: "❄️",
+    77: "❄️",
+    80: "🌦️", 81: "🌧️", 82: "🌧️",
+    85: "🌨️", 86: "🌨️",
+    95: "⛈️", 96: "⛈️", 99: "⛈️"
+  };
+
   try {
-    const ip = await fetch('https://ipapi.co/json/').then(r => r.json());
-    const { latitude, longitude, city } = ip;
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,wind_speed_10m`;
     const data = await fetch(url).then(r => r.json());
-    out.textContent = `${city || 'Your area'}: ${data.current?.temperature_2m ?? '?'}°C, wind ${data.current?.wind_speed_10m ?? '?'} m/s`;
-  } catch (e) { out.textContent = 'Weather unavailable.'; }
+    const c = data?.current || {};
+    const icon = ICON[c.weather_code] || "🌡️";
+    out.innerHTML = `
+      <span class="wx-icon">${icon}</span>
+      <span><strong>${CITY}</strong>: ${c.temperature_2m ?? "?"}°C, wind ${c.wind_speed_10m ?? "?"} m/s</span>
+    `;
+  } catch (e) {
+    out.textContent = 'Weather unavailable.';
+  }
 })();
 
 // 2) Recent GitHub activity (public)
