@@ -7,3 +7,4 @@ a { color:#9ecbff; }
 ul { padding-left: 16px; }
 input, button { padding:8px 10px; border-radius:8px; border:1px solid #2a2f3a; background:#0e1116; color:#e8eaf0; }
 button { cursor:pointer; }
+.wx-icon { font-size: 1.6rem; margin-right: 8px; vertical-align: -2px; }
