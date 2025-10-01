@@ -8,3 +8,5 @@ main:
     url: /about/
   - title: "Dashboard"
     url: /dashboard/
+  - title: "Photo Gallery"
+    url: /gallery/
