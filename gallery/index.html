@@ -1,0 +1,149 @@
+---
+layout: single
+title: "Photo Gallery"
+permalink: /gallery/
+---
+
+<style>
+  :root {
+    --ink: #e8eaf0; --muted:#aab2bf; --chip:#11151c; --chip-active:#263247;
+    --border:#2a2f3a; --bg:#0e1116; --card:#171a21;
+  }
+  .gal-wrap { color: var(--ink); }
+
+  /* Secondary navbar */
+  .gal-tabs { display:flex; flex-wrap:wrap; gap:.5rem; margin: .25rem 0 1rem; }
+  .gal-chip {
+    padding:.5rem .8rem; border-radius:999px; border:1px solid var(--border);
+    background:var(--chip); color:var(--ink); cursor:pointer; user-select:none;
+  }
+  .gal-chip.active { background:var(--chip-active); border-color:#3a4a61; }
+
+  /* Masonry (CSS columns) */
+  .gal-grid { column-gap: 14px; }
+  @media (min-width: 480px){ .gal-grid { column-count: 2; } }
+  @media (min-width: 840px){ .gal-grid { column-count: 3; } }
+  @media (min-width: 1200px){ .gal-grid { column-count: 4; } }
+
+  .gal-item { break-inside: avoid; margin: 0 0 14px; position:relative; }
+  .gal-item img { width:100%; display:block; border-radius:12px; }
+  .gal-cap { font-size:.85rem; color:var(--muted); margin:.35rem .25rem 0; }
+
+  /* Lightbox (native <dialog>) */
+  dialog.gal-lb { border:none; padding:0; background:rgba(0,0,0,.6); }
+  dialog.gal-lb::backdrop { background:rgba(0,0,0,.6); }
+  .gal-lb-inner { max-width:min(92vw,1200px); margin:6vh auto; position:relative; }
+  .gal-lb img { width:100%; display:block; border-radius:14px; }
+  .gal-close { position:absolute; top:8px; right:8px; background:#111; color:#fff;
+               border:none; border-radius:8px; padding:.4rem .6rem; cursor:pointer; }
+  .gal-lb-cap { color:#d8dbe3; padding:.5rem 0 0; font-size:.95rem; }
+</style>
+
+<div class="gal-wrap">
+  <div class="gal-tabs" id="tabs"></div>
+  <div class="gal-grid" id="grid" aria-live="polite"></div>
+
+  <dialog class="gal-lb" id="lb">
+    <div class="gal-lb-inner">
+      <button class="gal-close" id="lbClose">Close ✕</button>
+      <img id="lbImg" alt="">
+      <div class="gal-lb-cap" id="lbCap"></div>
+    </div>
+  </dialog>
+</div>
+
+<script>
+  // ------------ CONFIG: add your photos here ------------
+  // src: path in repo; cat must match one of CATS below; caption is optional
+  const PHOTOS = [
+    // Nature
+    { src: '/assets/gallery/nature/nature1.jpg',  cat: 'Nature',          caption: 'Forest trail' },
+    { src: '/assets/gallery/nature/nature2.jpg',  cat: 'Nature',          caption: 'Lake at dusk' },
+    { src: '/assets/gallery/nature/nature3.jpg',  cat: 'Nature',          caption: 'Snowy trees' },
+
+    // Travel/Trips
+    { src: '/assets/gallery/travel-trips/trip1.jpg', cat: 'Travel/Trips', caption: 'City skyline' },
+    { src: '/assets/gallery/travel-trips/trip2.jpg', cat: 'Travel/Trips', caption: 'Mountain pass' },
+
+    // Victory Garden Initiative
+    { src: '/assets/gallery/vgi/vgi1.jpg',        cat: 'Victory Garden Initiative', caption: 'Raised beds' },
+
+    // Drone shots
+    { src: '/assets/gallery/drone/drone1.jpg',    cat: 'Drone shots',     caption: 'Over the river' },
+
+    // Skyline
+    { src: '/assets/gallery/skyline/sky1.jpg',    cat: 'Skyline',         caption: 'Twilight' },
+
+    // Dogs
+    { src: '/assets/gallery/dogs/dog1.jpg',       cat: 'Dogs',            caption: 'Best friend' },
+  ];
+
+  // Category order shown in the secondary navbar
+  const CATS = ['All','Nature','Travel/Trips','Victory Garden Initiative','Drone shots','Skyline','Dogs'];
+  // -------------------------------------------------------
+
+  const tabs = document.getElementById('tabs');
+  const grid = document.getElementById('grid');
+  const lb = document.getElementById('lb');
+  const lbImg = document.getElementById('lbImg');
+  const lbCap = document.getElementById('lbCap');
+  const lbClose = document.getElementById('lbClose');
+
+  // Build tabs
+  CATS.forEach((c, i) => {
+    const b = document.createElement('button');
+    b.className = 'gal-chip' + (i===0 ? ' active' : '');
+    b.textContent = c;
+    b.dataset.cat = c;
+    b.onclick = () => selectCat(c);
+    tabs.appendChild(b);
+  });
+
+  // Render grid
+  function render(cat='All') {
+    grid.innerHTML = '';
+    const list = PHOTOS.filter(p => cat==='All' ? true : p.cat===cat);
+    list.forEach(p => {
+      const fig = document.createElement('figure');
+      fig.className = 'gal-item';
+
+      // Use loading="lazy" for performance
+      fig.innerHTML = `
+        <img src="${p.src}" alt="${p.caption || ''}" loading="lazy">
+        ${p.caption ? `<figcaption class="gal-cap">${p.caption}</figcaption>` : ''}
+      `;
+      fig.querySelector('img').addEventListener('click', () => openLB(p));
+      grid.appendChild(fig);
+    });
+  }
+
+  function openLB(p){
+    lbImg.src = p.src;
+    lbImg.alt = p.caption || '';
+    lbCap.textContent = p.caption || '';
+    lb.showModal();
+  }
+  lbClose.onclick = () => lb.close();
+  lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
+
+  function selectCat(cat){
+    // update active tab
+    document.querySelectorAll('.gal-chip').forEach(el => el.classList.toggle('active', el.dataset.cat===cat));
+    // render
+    render(cat);
+    // update URL (?cat=...)
+    const url = new URL(window.location);
+    url.searchParams.set('cat', cat);
+    window.history.replaceState({}, '', url);
+  }
+
+  // On load: honor ?cat= from URL
+  const paramCat = new URLSearchParams(window.location.search).get('cat');
+  if (paramCat && CATS.includes(paramCat)) {
+    // mark active tab
+    document.querySelectorAll('.gal-chip').forEach(el => el.classList.toggle('active', el.dataset.cat===paramCat));
+    render(paramCat);
+  } else {
+    render('All');
+  }
+</script>
