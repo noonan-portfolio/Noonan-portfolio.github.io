@@ -52,6 +52,60 @@ permalink: /gallery/
   </dialog>
 </div>
 
+---
+layout: single
+title: "Photo Gallery"
+permalink: /gallery/
+---
+
+<style>
+  :root {
+    --ink: #e8eaf0; --muted:#aab2bf; --chip:#11151c; --chip-active:#263247;
+    --border:#2a2f3a; --bg:#0e1116; --card:#171a21;
+  }
+  .gal-wrap { color: var(--ink); }
+
+  /* Secondary navbar */
+  .gal-tabs { display:flex; flex-wrap:wrap; gap:.5rem; margin: .25rem 0 1rem; }
+  .gal-chip {
+    padding:.5rem .8rem; border-radius:999px; border:1px solid var(--border);
+    background:var(--chip); color:var(--ink); cursor:pointer; user-select:none;
+  }
+  .gal-chip.active { background:var(--chip-active); border-color:#3a4a61; }
+
+  /* Masonry (CSS columns) */
+  .gal-grid { column-gap: 14px; }
+  @media (min-width: 480px){ .gal-grid { column-count: 2; } }
+  @media (min-width: 840px){ .gal-grid { column-count: 3; } }
+  @media (min-width: 1200px){ .gal-grid { column-count: 4; } }
+
+  .gal-item { break-inside: avoid; margin: 0 0 14px; position:relative; }
+  .gal-item img { width:100%; display:block; border-radius:12px; }
+  .gal-cap { font-size:.85rem; color:var(--muted); margin:.35rem .25rem 0; }
+
+  /* Lightbox (native <dialog>) */
+  dialog.gal-lb { border:none; padding:0; background:rgba(0,0,0,.6); }
+  dialog.gal-lb::backdrop { background:rgba(0,0,0,.6); }
+  .gal-lb-inner { max-width:min(92vw,1200px); margin:6vh auto; position:relative; }
+  .gal-lb img { width:100%; display:block; border-radius:14px; }
+  .gal-close { position:absolute; top:8px; right:8px; background:#111; color:#fff;
+               border:none; border-radius:8px; padding:.4rem .6rem; cursor:pointer; }
+  .gal-lb-cap { color:#d8dbe3; padding:.5rem 0 0; font-size:.95rem; }
+</style>
+
+<div class="gal-wrap">
+  <div class="gal-tabs" id="tabs"></div>
+  <div class="gal-grid" id="grid" aria-live="polite"></div>
+
+  <dialog class="gal-lb" id="lb">
+    <div class="gal-lb-inner">
+      <button class="gal-close" id="lbClose">Close ✕</button>
+      <img id="lbImg" alt="">
+      <div class="gal-lb-cap" id="lbCap"></div>
+    </div>
+  </dialog>
+</div>
+
 <script>
   // ------------ CONFIG: add your photos here ------------
   // src: path in repo; cat must match one of CATS below; caption is optional
