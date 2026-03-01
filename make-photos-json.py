@@ -1,18 +1,24 @@
 import json, os
 
 CATS = {
-  "Nature": "assets/gallery/nature",
-  "Travel": "assets/gallery/travel",
-  "Victory Garden Initiative": "assets/gallery/vgi",
-  "Drone shots": "assets/gallery/drone",
-  "Skyline": "assets/gallery/skyline",
-  "Dogs": "assets/gallery/dogs",
+  "Nature": ["assets/gallery/nature", "assets/gallery/Nature"],
+  "Travel": ["assets/gallery/travel", "assets/gallery/travel-trips", "assets/gallery/Travel"],
+  "Victory Garden Initiative": ["assets/gallery/vgi", "assets/gallery/VGI"],
+  "Drone shots": ["assets/gallery/drone", "assets/gallery/Drone", "assets/gallery/drone-shots"],
+  "Skyline": ["assets/gallery/skyline", "assets/gallery/Skyline"],
+  "Dogs": ["assets/gallery/dogs", "assets/gallery/Dogs"],
 }
 
 EXTS = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".heic"}
 
+def first_existing(paths):
+  for p in paths:
+    if os.path.isdir(p):
+      return p
+  return None
+
 def list_images(folder):
-  if not os.path.isdir(folder):
+  if not folder or not os.path.isdir(folder):
     return []
   files = []
   for name in sorted(os.listdir(folder)):
@@ -23,7 +29,10 @@ def list_images(folder):
       files.append("/" + folder + "/" + name)
   return files
 
-out = {cat: list_images(path) for cat, path in CATS.items()}
+out = {}
+for cat, options in CATS.items():
+  folder = first_existing(options)
+  out[cat] = list_images(folder)
 
 os.makedirs("assets/gallery", exist_ok=True)
 with open("assets/gallery/photos.json", "w") as f:
