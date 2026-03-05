@@ -11,13 +11,16 @@ permalink: /gallery/
   }
   .gal-wrap { color: var(--ink); }
 
-  /* Secondary navbar */
+  /* Primary navbar */
   .gal-tabs { display:flex; flex-wrap:wrap; gap:.5rem; margin: .25rem 0 1rem; }
   .gal-chip {
     padding:.5rem .8rem; border-radius:999px; border:1px solid var(--border);
     background:var(--chip); color:var(--ink); cursor:pointer; user-select:none;
   }
   .gal-chip.active { background:var(--chip-active); border-color:#3a4a61; }
+
+  /* Secondary (Travel) navbar */
+  .gal-subtabs { display:flex; flex-wrap:wrap; gap:.5rem; margin: 0 0 1rem; }
 
   /* Masonry (CSS columns) */
   .gal-grid { column-gap: 14px; }
@@ -41,6 +44,7 @@ permalink: /gallery/
 
 <div class="gal-wrap">
   <div class="gal-tabs" id="tabs"></div>
+  <div class="gal-subtabs" id="subtabs" style="display:none;"></div>
   <div class="gal-grid" id="grid" aria-live="polite"></div>
 
   <dialog class="gal-lb" id="lb">
@@ -52,14 +56,18 @@ permalink: /gallery/
   </dialog>
 </div>
 
-
-
 <script>
-  // Categories MUST match the keys in assets/gallery/photos.json
-  const CATS = ['All','Nature','Travel','Victory Garden Initiative','Drone shots','Skyline','Dogs'];
+  // Top-level categories MUST match keys in assets/gallery/photos.json
+  // Travel is special: photos.json is expected to have "Travel": { "Trip Name": [ ... ], ... }
+  const CATS = ['All','Nature','Travel','Skyline','Victory Garden Initiative'];
+
   let PHOTOS = [];
+  let TRIPS = [];              // Travel subcategory names (from manifest)
+  let ACTIVE_CAT = 'All';
+  let ACTIVE_TRIP = 'All';     // 'All' means "All Travel"
 
   const tabs = document.getElementById('tabs');
+  const subtabs = document.getElementById('subtabs');
   const grid = document.getElementById('grid');
   const lb = document.getElementById('lb');
   const lbImg = document.getElementById('lbImg');
@@ -71,18 +79,39 @@ permalink: /gallery/
     const data = await res.json();
 
     PHOTOS = [];
+    TRIPS = [];
+
+    // Non-Travel categories (arrays)
     for (const cat of CATS) {
-      if (cat === 'All') continue;
+      if (cat === 'All' || cat === 'Travel') continue;
       const items = data[cat] || [];
-      items.forEach(src => PHOTOS.push({ src, cat, caption: '' }));
+      items.forEach(src => PHOTOS.push({ src, cat, trip: null, caption: '' }));
     }
+
+    // Travel (object of trips)
+    const travel = data['Travel'] || {};
+    TRIPS = Object.keys(travel);
+
+    // Keep ordering predictable (your two travel subcategories)
+    const preferred = ['Iceland 2018', 'Yearly River Trips / BWCA'];
+    TRIPS.sort((a, b) => {
+      const ia = preferred.indexOf(a);
+      const ib = preferred.indexOf(b);
+      if (ia !== -1 || ib !== -1) return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
+      return a.localeCompare(b);
+    });
+
+    TRIPS.forEach(tripName => {
+      const items = travel[tripName] || [];
+      items.forEach(src => PHOTOS.push({ src, cat: 'Travel', trip: tripName, caption: '' }));
+    });
   }
 
-  function buildTabs(activeCat) {
+  function buildTabs() {
     tabs.innerHTML = '';
     CATS.forEach(c => {
       const b = document.createElement('button');
-      b.className = 'gal-chip' + (c === activeCat ? ' active' : '');
+      b.className = 'gal-chip' + (c === ACTIVE_CAT ? ' active' : '');
       b.textContent = c;
       b.dataset.cat = c;
       b.onclick = () => selectCat(c);
@@ -90,9 +119,44 @@ permalink: /gallery/
     });
   }
 
-  function render(cat='All') {
+  function buildSubtabs() {
+    if (ACTIVE_CAT !== 'Travel') {
+      subtabs.style.display = 'none';
+      subtabs.innerHTML = '';
+      return;
+    }
+
+    subtabs.style.display = '';
+    subtabs.innerHTML = '';
+
+    const allBtn = document.createElement('button');
+    allBtn.className = 'gal-chip' + (ACTIVE_TRIP === 'All' ? ' active' : '');
+    allBtn.textContent = 'All Travel';
+    allBtn.onclick = () => selectTrip('All');
+    subtabs.appendChild(allBtn);
+
+    TRIPS.forEach(t => {
+      const b = document.createElement('button');
+      b.className = 'gal-chip' + (t === ACTIVE_TRIP ? ' active' : '');
+      b.textContent = t;
+      b.dataset.trip = t;
+      b.onclick = () => selectTrip(t);
+      subtabs.appendChild(b);
+    });
+  }
+
+  function render() {
     grid.innerHTML = '';
-    const list = (cat === 'All') ? PHOTOS : PHOTOS.filter(p => p.cat === cat);
+
+    let list = PHOTOS;
+
+    if (ACTIVE_CAT !== 'All') {
+      list = list.filter(p => p.cat === ACTIVE_CAT);
+    }
+
+    if (ACTIVE_CAT === 'Travel' && ACTIVE_TRIP !== 'All') {
+      list = list.filter(p => p.trip === ACTIVE_TRIP);
+    }
 
     list.forEach(p => {
       const fig = document.createElement('figure');
@@ -100,7 +164,7 @@ permalink: /gallery/
 
       const img = document.createElement('img');
       img.loading = 'lazy';
-      img.src = encodeURI(p.src);      // IMPORTANT for spaces like "(1)"
+      img.src = encodeURI(p.src); // IMPORTANT for spaces like "(1)"
       img.alt = p.caption || '';
       img.addEventListener('click', () => openLB(p));
 
@@ -115,6 +179,10 @@ permalink: /gallery/
 
       grid.appendChild(fig);
     });
+
+    buildTabs();
+    buildSubtabs();
+    syncURL();
   }
 
   function openLB(p){
@@ -128,26 +196,45 @@ permalink: /gallery/
   lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
 
   function selectCat(cat){
-    document.querySelectorAll('.gal-chip').forEach(el =>
-      el.classList.toggle('active', el.dataset.cat === cat)
-    );
-    render(cat);
+    ACTIVE_CAT = cat;
+    if (cat !== 'Travel') ACTIVE_TRIP = 'All';
+    render();
+  }
 
+  function selectTrip(trip){
+    ACTIVE_TRIP = trip;
+    render();
+  }
+
+  function syncURL() {
     const url = new URL(window.location);
-    url.searchParams.set('cat', cat);
+    url.searchParams.delete('cat');
+    url.searchParams.delete('trip');
+
+    if (ACTIVE_CAT !== 'All') url.searchParams.set('cat', ACTIVE_CAT);
+    if (ACTIVE_CAT === 'Travel' && ACTIVE_TRIP !== 'All') url.searchParams.set('trip', ACTIVE_TRIP);
+
     window.history.replaceState({}, '', url);
   }
 
-  function getCatFromURL() {
-    const paramCat = new URLSearchParams(window.location.search).get('cat');
-    return (paramCat && CATS.includes(paramCat)) ? paramCat : 'All';
+  function initFromURL() {
+    const sp = new URLSearchParams(window.location.search);
+    const cat = sp.get('cat');
+    const trip = sp.get('trip');
+
+    if (cat && CATS.includes(cat)) ACTIVE_CAT = cat;
+    if (ACTIVE_CAT === 'Travel' && trip) ACTIVE_TRIP = trip;
   }
 
-  // INIT
   document.addEventListener('DOMContentLoaded', async () => {
+    initFromURL();
     await loadManifest();
-    const startCat = getCatFromURL();
-    buildTabs(startCat);
-    render(startCat);
+
+    // If trip param isn't valid, fall back to All Travel
+    if (ACTIVE_CAT === 'Travel' && ACTIVE_TRIP !== 'All' && !TRIPS.includes(ACTIVE_TRIP)) {
+      ACTIVE_TRIP = 'All';
+    }
+
+    render();
   });
 </script>
