@@ -11,6 +11,8 @@ permalink: /projects/
 }
 
 .project-grid {
+  max-width: 1100px;
+  margin: 1.5rem auto;
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.5rem;
@@ -34,7 +36,7 @@ permalink: /projects/
 .project-card img {
   display: block;
   width: 100%;
-  height: 260px;
+  height: 320px;
   object-fit: cover;
 }
 
@@ -99,7 +101,7 @@ permalink: /projects/
 }
 </style>
 
-# Projects
+
 
 <div class="projects-intro">
   Here are a few projects that reflect my interest in infrastructure, automation, web development, and building practical systems with real-world use.
