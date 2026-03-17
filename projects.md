@@ -15,8 +15,10 @@ permalink: /projects/
   margin: 1.5rem auto;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.5rem;
+  gap: 2rem;
   margin-top: 1.5rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 @media (min-width: 900px) {
@@ -26,17 +28,18 @@ permalink: /projects/
 }
 
 .project-card {
-  background: #171a21;
+  background: #111827;
   border: 1px solid #2a2f3a;
   border-radius: 18px;
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(0,0,0,.18);
+  color: #e8eaf0;
 }
 
 .project-card img {
   display: block;
   width: 100%;
-  height: 320px;
+  height: 360px;
   object-fit: cover;
 }
 
@@ -48,10 +51,12 @@ permalink: /projects/
   margin-top: 0;
   margin-bottom: .75rem;
   font-size: 1.4rem;
+  color: #ffffff;
 }
 
 .project-card p {
   margin-bottom: 1rem;
+  color: #cfd6e3;
 }
 
 .project-meta {
@@ -61,6 +66,7 @@ permalink: /projects/
 
 .project-meta li {
   margin-bottom: .45rem;
+  color: #d8dbe3;
 }
 
 .project-tag-row {
