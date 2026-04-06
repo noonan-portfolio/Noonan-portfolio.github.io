@@ -9,13 +9,12 @@ body {
   background: #f5f7fa;
 }
 
-/* HERO */
 .home-hero {
   text-align: center;
   padding: 3rem 1rem;
   border-radius: 14px;
   background: linear-gradient(135deg, #f8fafc, #eef2f7);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
 }
 
 .home-hero h1 {
@@ -30,7 +29,10 @@ body {
   min-height: 1.6rem;
 }
 
-/* BUTTONS */
+.button-row {
+  margin-top: 1rem;
+}
+
 .home-btn {
   display: inline-block;
   margin: 0.4rem;
@@ -47,15 +49,15 @@ body {
 .home-btn:hover {
   transform: translateY(-2px);
   background: #1f2937;
+  color: white;
+  text-decoration: none;
 }
 
-/* SECTIONS */
 .home-section {
   margin-top: 3.5rem;
   line-height: 1.6;
 }
 
-/* GRID */
 .quick-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -63,27 +65,25 @@ body {
   margin-top: 1rem;
 }
 
-/* CARDS */
 .quick-card {
   background: white;
   border-radius: 12px;
   padding: 1.2rem;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
   transition: all 0.2s ease;
 }
 
 .quick-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
 }
 
-/* FEATURED */
 .featured-box {
   margin-top: 1rem;
   background: white;
   border-radius: 14px;
   padding: 1.8rem;
-  box-shadow: 0 8px 22px rgba(0,0,0,0.06);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
   text-align: center;
 }
 
