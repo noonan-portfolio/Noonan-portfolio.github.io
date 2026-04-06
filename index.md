@@ -5,72 +5,90 @@ permalink: /
 ---
 
 <style>
+body {
+  background: #f5f7fa;
+}
+
+/* HERO */
 .home-hero {
   text-align: center;
-  margin-top: 2rem;
+  padding: 3rem 1rem;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f8fafc, #eef2f7);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
 }
 
 .home-hero h1 {
-  font-size: 2.4rem;
-  margin-bottom: 0.4rem;
+  font-size: 2.6rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
 }
 
 .home-subtext {
-  font-size: 1.15rem;
-  color: #6b7280;
+  font-size: 1.2rem;
+  color: #4b5563;
   min-height: 1.6rem;
 }
 
-.home-section {
-  margin-top: 3rem;
-}
-
-.quick-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.quick-card {
-  background: #f8f8f8;
-  border: 1px solid #dddddd;
-  border-radius: 10px;
-  padding: 1rem;
-}
-
-.featured-box {
-  margin-top: 1rem;
-  background: #f8f8f8;
-  border: 1px solid #dddddd;
-  border-radius: 12px;
-  padding: 1.5rem;
-}
-
-.featured-box h3 {
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-}
-
-.button-row {
-  margin-top: 1rem;
-}
-
+/* BUTTONS */
 .home-btn {
   display: inline-block;
-  margin: 0.3rem;
-  padding: 0.55rem 1rem;
-  border: 1px solid #333333;
-  border-radius: 6px;
+  margin: 0.4rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
   text-decoration: none;
-  color: #333333;
-  transition: 0.2s ease;
+  font-weight: 500;
+  border: none;
+  background: #111827;
+  color: white;
+  transition: all 0.2s ease;
 }
 
 .home-btn:hover {
-  background: #333333;
-  color: white;
-  text-decoration: none;
+  transform: translateY(-2px);
+  background: #1f2937;
+}
+
+/* SECTIONS */
+.home-section {
+  margin-top: 3.5rem;
+  line-height: 1.6;
+}
+
+/* GRID */
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.2rem;
+  margin-top: 1rem;
+}
+
+/* CARDS */
+.quick-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.2rem;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  transition: all 0.2s ease;
+}
+
+.quick-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+}
+
+/* FEATURED */
+.featured-box {
+  margin-top: 1rem;
+  background: white;
+  border-radius: 14px;
+  padding: 1.8rem;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.06);
+  text-align: center;
+}
+
+.featured-box h3 {
+  margin-bottom: 0.5rem;
 }
 </style>
 
