@@ -4,27 +4,37 @@ title: "About"
 permalink: /about/
 ---
 
-# About Me 
+ 
 Hi, I'm Joe 
-I'm someone who enjoys leearning building and finding better ways to solve problems. I love spending time outdoors in my free time. 
+I'm someone who enjoys learning building and finding better ways to solve problems. Outside of that, you'll find me outdoors. 
 
 
 ---
 ## A Few Fun Facts
 
 - I enjoy traveling and experiencing new cultures
-- Lifelong Learner - currently diving into building an IT Support Chatbot.
-- I can play the Piano
+- Lifelong Learner - currently diving into building an IT Support Chatbot
+- I build small projects to learn and better comprehend new tools
+- Optimization is something I look for in my everyday life
+- I've worked out consistently for the past 2 years
+- I read at least 4-5 books a year
+- I'm known for staying calm when things get chaotic
+- I have a rapid chess rating of 1200 on chess.com
+- Feedback is something appreciate
+- My capability to anticipate is one of strongest attributes  
+- I have 12 hole in ones... at a par 3 course :)
   
 ---
 
 ## What I Bring to the Table
-Employers value people who can **work independently**, communicate clearly, and deliver results - qualities I've focused on building:
+I am someone who can **work independently**, communicate clearly, and deliver results - qualities I've focused on building:
 
 - **Self-motivated:** I take ownership of tasks and see them through without constant oversight.
 - **Tech and Tools:** Comfortable with Github, project management tools(Trello/Asana), and collaboration platfroms (Slack, Zoom, Google Workspace).
 - **Communication:** Clear written and verbal communication, which I know us essential in remote or hybrid teams.
 - **Problem-soliving mindset:** I enjoy breaking problems down and finding practical solutions.
+- **Fast Learner:** I am someone who keeps up with tech and picks up new tools quickly.
+- **Reliable and Consistent:** Deadlines are something I take very seriously. 
 
 ---
 
