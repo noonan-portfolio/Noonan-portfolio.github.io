@@ -217,7 +217,7 @@ permalink: /
 
 <!-- HIGHLIGHTS -->
 <div class="home-section">
-  <div class="section-kicker">Quick snapshot</div>
+  <div class="section-kicker"></div>
   <h2>Site Highlights</h2>
 
   <div class="highlights-strip">
@@ -245,7 +245,7 @@ permalink: /
 
 <!-- BUILT -->
 <div class="home-section">
-  <div class="section-kicker">Built by me</div>
+  <div class="section-kicker"></div>
   <h2>What I've Built</h2>
 
   <div class="quick-grid">
@@ -273,7 +273,7 @@ permalink: /
 
 <!-- FEATURED -->
 <div class="home-section">
-  <div class="section-kicker">Featured</div>
+  <div class="section-kicker"></div>
   <h2>Featured Work</h2>
 
   <div class="featured-box">
