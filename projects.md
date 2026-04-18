@@ -308,7 +308,7 @@ permalink: /projects/
 
     <figure>
 
-      <img src="/assets/projects/compost/reports.jpg" alt="Compost Tracker reports page">
+      <img src="{{ '/assets/projects/compost/reports.jpg' | relative_url }}" alt="Compost Tracker reports page">
 
       <figcaption>Reporting view used to summarize yearly activity, material ratios, and soil output.</figcaption>
 
