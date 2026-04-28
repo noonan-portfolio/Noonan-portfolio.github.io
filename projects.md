@@ -292,7 +292,7 @@ permalink: /projects/
 
     <figure>
 
-      <img src="/assets/projects/compost/dashboard.jpg" alt="Compost Tracker dashboard overview">
+      <img src="{{ '/assets/images/projects/compost/dashboard.jpg' | relative_url }}" alt="Compost Tracker dashboard overview">
 
       <figcaption>Dashboard overview showing live metrics, quick stats, and recent compost entries.</figcaption>
 
@@ -300,7 +300,7 @@ permalink: /projects/
 
     <figure>
 
-      <img src="/assets/projects/compost/log-entry.jpg" alt="Compost Tracker log entry form">
+      <img src="{{ '/assets/images/projects/compost/log-entry.jpg' | relative_url }}" alt="Compost Tracker log entry form">
 
       <figcaption>Log entry workflow used to record greens, browns, food scraps, temperature, and notes.</figcaption>
 
@@ -308,7 +308,7 @@ permalink: /projects/
 
     <figure>
 
-      <img src="{{ '/assets/projects/compost/reports.jpg' | relative_url }}" alt="Compost Tracker reports page">
+      <img src="{{ '/assets/images/projects/compost/reports.jpg' | relative_url }}" alt="Compost Tracker reports page">
 
       <figcaption>Reporting view used to summarize yearly activity, material ratios, and soil output.</figcaption>
 
@@ -316,7 +316,7 @@ permalink: /projects/
 
     <figure>
 
-      <img src="/assets/projects/compost/database.jpg" alt="Database records for the compost tracker">
+      <img src="{{ '/assets/images/projects/compost/database.jpg' | relative_url }}" alt="Database records for the compost tracker">
 
       <figcaption>Database layer showing compost log records stored and managed through MySQL.</figcaption>
 
@@ -324,7 +324,7 @@ permalink: /projects/
 
     <figure>
 
-      <img src="/assets/projects/compost/admin-panel.jpg" alt="Compost Tracker admin panel">
+      <img src="{{ '/assets/images/projects/compost/admin-panel.jpg' | relative_url }}" alt="Compost Tracker admin panel">
 
       <figcaption>Admin panel for user management, compost log oversight, and system-level control.</figcaption>
 
