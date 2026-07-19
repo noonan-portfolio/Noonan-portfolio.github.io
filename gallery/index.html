@@ -9,11 +9,10 @@ permalink: /gallery/
     --ink: #e8eaf0; --muted:#aab2bf; --chip:#11151c; --chip-active:#263247;
     --border:#2a2f3a; --bg:#0e1116; --card:#171a21;
   }
-
   .gal-wrap { color: var(--ink); }
 
   /* Primary navbar */
-  .gal-tabs { display:flex; flex-wrap:wrap; gap:.5rem; margin:.25rem 0 1rem; }
+  .gal-tabs { display:flex; flex-wrap:wrap; gap:.5rem; margin: .25rem 0 1rem; }
   .gal-chip {
     padding:.5rem .8rem; border-radius:999px; border:1px solid var(--border);
     background:var(--chip); color:var(--ink); cursor:pointer; user-select:none;
@@ -21,57 +20,25 @@ permalink: /gallery/
   .gal-chip.active { background:var(--chip-active); border-color:#3a4a61; }
 
   /* Secondary (Travel) navbar */
-  .gal-subtabs { display:flex; flex-wrap:wrap; gap:.5rem; margin:0 0 1rem; }
+  .gal-subtabs { display:flex; flex-wrap:wrap; gap:.5rem; margin: 0 0 1rem; }
 
   /* Masonry (CSS columns) */
-  .gal-grid { column-gap:14px; }
-  @media (min-width:480px){ .gal-grid { column-count:2; } }
-  @media (min-width:840px){ .gal-grid { column-count:3; } }
-  @media (min-width:1200px){ .gal-grid { column-count:4; } }
+  .gal-grid { column-gap: 14px; }
+  @media (min-width: 480px){ .gal-grid { column-count: 2; } }
+  @media (min-width: 840px){ .gal-grid { column-count: 3; } }
+  @media (min-width: 1200px){ .gal-grid { column-count: 4; } }
 
-  .gal-item {
-    break-inside:avoid;
-    margin:0 0 14px;
-    position:relative;
-    overflow:hidden;
-    border-radius:12px;
-    background:var(--card);
-  }
-
-  .gal-item img {
-    width:100%;
-    display:block;
-    border-radius:12px;
-    cursor:zoom-in;
-    opacity:0;
-    transform:translateY(6px);
-    transition:opacity .28s ease, transform .28s ease;
-  }
-
-  .gal-item img.is-loaded {
-    opacity:1;
-    transform:none;
-  }
-
-  .gal-cap { font-size:.85rem; color:var(--muted); margin:.35rem .25rem .5rem; }
-
-  .gal-status {
-    column-span:all;
-    text-align:center;
-    color:var(--muted);
-    padding:1rem 0 1.5rem;
-    min-height:1px;
-  }
+  .gal-item { break-inside: avoid; margin: 0 0 14px; position:relative; }
+  .gal-item img { width:100%; display:block; border-radius:12px; }
+  .gal-cap { font-size:.85rem; color:var(--muted); margin:.35rem .25rem 0; }
 
   /* Lightbox (native <dialog>) */
   dialog.gal-lb { border:none; padding:0; background:rgba(0,0,0,.6); }
   dialog.gal-lb::backdrop { background:rgba(0,0,0,.6); }
   .gal-lb-inner { max-width:min(92vw,1200px); margin:6vh auto; position:relative; }
   .gal-lb img { width:100%; display:block; border-radius:14px; }
-  .gal-close {
-    position:absolute; top:8px; right:8px; background:#111; color:#fff;
-    border:none; border-radius:8px; padding:.4rem .6rem; cursor:pointer;
-  }
+  .gal-close { position:absolute; top:8px; right:8px; background:#111; color:#fff;
+               border:none; border-radius:8px; padding:.4rem .6rem; cursor:pointer; }
   .gal-lb-cap { color:#d8dbe3; padding:.5rem 0 0; font-size:.95rem; }
 </style>
 
@@ -79,7 +46,6 @@ permalink: /gallery/
   <div class="gal-tabs" id="tabs"></div>
   <div class="gal-subtabs" id="subtabs" style="display:none;"></div>
   <div class="gal-grid" id="grid" aria-live="polite"></div>
-  <div class="gal-status" id="loadMore" aria-hidden="true"></div>
 
   <dialog class="gal-lb" id="lb">
     <div class="gal-lb-inner">
@@ -94,19 +60,15 @@ permalink: /gallery/
   // Top-level categories MUST match keys in assets/gallery/photos.json
   // Travel is special: photos.json is expected to have "Travel": { "Trip Name": [ ... ], ... }
   const CATS = ['All','Nature','Travel','Skyline','Victory Garden Initiative'];
-  const BATCH_SIZE = 18;
 
   let PHOTOS = [];
-  let TRIPS = [];
+  let TRIPS = [];              // Travel subcategory names (from manifest)
   let ACTIVE_CAT = 'All';
-  let ACTIVE_TRIP = 'All';
-  let FILTERED_PHOTOS = [];
-  let RENDERED_COUNT = 0;
+  let ACTIVE_TRIP = 'All';     // 'All' means "All Travel"
 
   const tabs = document.getElementById('tabs');
   const subtabs = document.getElementById('subtabs');
   const grid = document.getElementById('grid');
-  const loadMore = document.getElementById('loadMore');
   const lb = document.getElementById('lb');
   const lbImg = document.getElementById('lbImg');
   const lbCap = document.getElementById('lbCap');
@@ -119,15 +81,18 @@ permalink: /gallery/
     PHOTOS = [];
     TRIPS = [];
 
+    // Non-Travel categories (arrays)
     for (const cat of CATS) {
       if (cat === 'All' || cat === 'Travel') continue;
       const items = data[cat] || [];
-      items.forEach(src => PHOTOS.push({ src, cat, trip:null, caption:'' }));
+      items.forEach(src => PHOTOS.push({ src, cat, trip: null, caption: '' }));
     }
 
+    // Travel (object of trips)
     const travel = data['Travel'] || {};
     TRIPS = Object.keys(travel);
 
+    // Keep ordering predictable (your two travel subcategories)
     const preferred = ['Iceland 2018', 'Yearly River Trips / BWCA'];
     TRIPS.sort((a, b) => {
       const ia = preferred.indexOf(a);
@@ -138,7 +103,7 @@ permalink: /gallery/
 
     TRIPS.forEach(tripName => {
       const items = travel[tripName] || [];
-      items.forEach(src => PHOTOS.push({ src, cat:'Travel', trip:tripName, caption:'' }));
+      items.forEach(src => PHOTOS.push({ src, cat: 'Travel', trip: tripName, caption: '' }));
     });
   }
 
@@ -180,7 +145,9 @@ permalink: /gallery/
     });
   }
 
-  function getFilteredPhotos() {
+  function render() {
+    grid.innerHTML = '';
+
     let list = PHOTOS;
 
     if (ACTIVE_CAT !== 'All') {
@@ -191,58 +158,34 @@ permalink: /gallery/
       list = list.filter(p => p.trip === ACTIVE_TRIP);
     }
 
-    return list;
-  }
+    list.forEach(p => {
+      const fig = document.createElement('figure');
+      fig.className = 'gal-item';
 
-  function createPhotoItem(p) {
-    const fig = document.createElement('figure');
-    fig.className = 'gal-item';
+      const img = document.createElement('img');
+      img.loading = 'lazy';
+      img.src = encodeURI(p.src); // IMPORTANT for spaces like "(1)"
+      img.alt = p.caption || '';
+      img.addEventListener('click', () => openLB(p));
 
-    const img = document.createElement('img');
-    img.loading = 'lazy';
-    img.decoding = 'async';
-    img.src = encodeURI(p.src);
-    img.alt = p.caption || '';
-    img.addEventListener('load', () => img.classList.add('is-loaded'), { once:true });
-    img.addEventListener('click', () => openLB(p));
+      fig.appendChild(img);
 
-    fig.appendChild(img);
+      if (p.caption) {
+        const cap = document.createElement('figcaption');
+        cap.className = 'gal-cap';
+        cap.textContent = p.caption;
+        fig.appendChild(cap);
+      }
 
-    if (p.caption) {
-      const cap = document.createElement('figcaption');
-      cap.className = 'gal-cap';
-      cap.textContent = p.caption;
-      fig.appendChild(cap);
-    }
+      grid.appendChild(fig);
+    });
 
-    return fig;
-  }
-
-  function renderNextBatch() {
-    if (RENDERED_COUNT >= FILTERED_PHOTOS.length) return;
-
-    const nextPhotos = FILTERED_PHOTOS.slice(RENDERED_COUNT, RENDERED_COUNT + BATCH_SIZE);
-    const fragment = document.createDocumentFragment();
-
-    nextPhotos.forEach(p => fragment.appendChild(createPhotoItem(p)));
-    grid.appendChild(fragment);
-    RENDERED_COUNT += nextPhotos.length;
-
-    loadMore.setAttribute('aria-hidden', RENDERED_COUNT >= FILTERED_PHOTOS.length ? 'true' : 'false');
-  }
-
-  function render() {
-    grid.innerHTML = '';
-    FILTERED_PHOTOS = getFilteredPhotos();
-    RENDERED_COUNT = 0;
-
-    renderNextBatch();
     buildTabs();
     buildSubtabs();
     syncURL();
   }
 
-  function openLB(p) {
+  function openLB(p){
     lbImg.src = encodeURI(p.src);
     lbImg.alt = p.caption || '';
     lbCap.textContent = p.caption || '';
@@ -252,13 +195,13 @@ permalink: /gallery/
   lbClose.onclick = () => lb.close();
   lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
 
-  function selectCat(cat) {
+  function selectCat(cat){
     ACTIVE_CAT = cat;
     if (cat !== 'Travel') ACTIVE_TRIP = 'All';
     render();
   }
 
-  function selectTrip(trip) {
+  function selectTrip(trip){
     ACTIVE_TRIP = trip;
     render();
   }
@@ -283,16 +226,11 @@ permalink: /gallery/
     if (ACTIVE_CAT === 'Travel' && trip) ACTIVE_TRIP = trip;
   }
 
-  const batchObserver = new IntersectionObserver(entries => {
-    if (entries[0].isIntersecting) renderNextBatch();
-  }, { rootMargin:'700px 0px' });
-
-  batchObserver.observe(loadMore);
-
   document.addEventListener('DOMContentLoaded', async () => {
     initFromURL();
     await loadManifest();
 
+    // If trip param isn't valid, fall back to All Travel
     if (ACTIVE_CAT === 'Travel' && ACTIVE_TRIP !== 'All' && !TRIPS.includes(ACTIVE_TRIP)) {
       ACTIVE_TRIP = 'All';
     }
