@@ -43,25 +43,58 @@ permalink: /gallery/
     margin:0 0 1rem;
   }
 
-  /* Masonry (CSS columns) */
-  .gal-grid { column-gap: 14px; }
-  @media (min-width: 480px){ .gal-grid { column-count: 2; } }
-  @media (min-width: 840px){ .gal-grid { column-count: 3; } }
-  @media (min-width: 1200px){ .gal-grid { column-count: 4; } }
-  @media (min-width: 1550px){ .gal-grid { column-count: 5; } }
+  /* Editorial mosaic grid */
+  .gal-grid {
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    grid-auto-flow:dense;
+    gap:14px;
+  }
 
-  .gal-item { break-inside: avoid; margin: 0 0 14px; position:relative; }
+  @media (min-width:840px){
+    .gal-grid { grid-template-columns:repeat(3, minmax(0, 1fr)); }
+  }
+
+  @media (min-width:1200px){
+    .gal-grid { grid-template-columns:repeat(4, minmax(0, 1fr)); }
+  }
+
+  @media (min-width:1550px){
+    .gal-grid { grid-template-columns:repeat(5, minmax(0, 1fr)); }
+  }
+
+  .gal-item {
+    margin:0;
+    position:relative;
+    overflow:hidden;
+    border-radius:12px;
+    background:var(--card);
+    aspect-ratio:4 / 3;
+  }
+
+  .gal-item.gal-tall { aspect-ratio:3 / 4; }
+
+  .gal-item.gal-featured {
+    grid-column:span 2;
+    grid-row:span 2;
+    aspect-ratio:16 / 10;
+  }
+
   .gal-item img {
     width:100%;
+    height:100%;
     display:block;
+    object-fit:cover;
     border-radius:12px;
     cursor:zoom-in;
-    transition:transform .2s ease, box-shadow .2s ease;
+    transition:transform .25s ease, box-shadow .25s ease;
   }
+
   .gal-item img:hover {
-    transform:scale(1.01);
+    transform:scale(1.025);
     box-shadow:0 10px 28px rgba(0,0,0,.28);
   }
+
   .gal-cap { font-size:.85rem; color:var(--muted); margin:.35rem .25rem 0; }
 
   .gal-load-wrap { text-align:center; margin:1.5rem 0 0; }
@@ -85,10 +118,10 @@ permalink: /gallery/
                border:none; border-radius:8px; padding:.4rem .6rem; cursor:pointer; }
   .gal-lb-cap { color:#d8dbe3; padding:.5rem 0 0; font-size:.95rem; }
 
-  @media (max-width: 600px) {
-    .gal-wrap {
-      width: calc(100vw - 1rem);
-    }
+  @media (max-width:700px) {
+    .gal-wrap { width:calc(100vw - 1rem); }
+    .gal-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:8px; }
+    .gal-item.gal-featured { grid-column:span 2; grid-row:span 1; aspect-ratio:16 / 10; }
   }
 </style>
 
@@ -117,9 +150,9 @@ permalink: /gallery/
   const BATCH_SIZE = 24;
 
   let PHOTOS = [];
-  let TRIPS = [];              // Travel subcategory names (from manifest)
+  let TRIPS = [];
   let ACTIVE_CAT = 'All';
-  let ACTIVE_TRIP = 'All';     // 'All' means "All Travel"
+  let ACTIVE_TRIP = 'All';
   let FILTERED_PHOTOS = [];
   let RENDERED_COUNT = 0;
 
@@ -133,24 +166,21 @@ permalink: /gallery/
   const lbClose = document.getElementById('lbClose');
 
   async function loadManifest() {
-    const res = await fetch('/assets/gallery/photos.json', { cache: 'no-store' });
+    const res = await fetch('/assets/gallery/photos.json', { cache:'no-store' });
     const data = await res.json();
 
     PHOTOS = [];
     TRIPS = [];
 
-    // Non-Travel categories (arrays)
     for (const cat of CATS) {
       if (cat === 'All' || cat === 'Travel') continue;
       const items = data[cat] || [];
-      items.forEach(src => PHOTOS.push({ src, cat, trip: null, caption: '' }));
+      items.forEach(src => PHOTOS.push({ src, cat, trip:null, caption:'' }));
     }
 
-    // Travel (object of trips)
     const travel = data['Travel'] || {};
     TRIPS = Object.keys(travel);
 
-    // Keep ordering predictable (your two travel subcategories)
     const preferred = ['Iceland 2018', 'Yearly River Trips / BWCA'];
     TRIPS.sort((a, b) => {
       const ia = preferred.indexOf(a);
@@ -161,7 +191,7 @@ permalink: /gallery/
 
     TRIPS.forEach(tripName => {
       const items = travel[tripName] || [];
-      items.forEach(src => PHOTOS.push({ src, cat: 'Travel', trip: tripName, caption: '' }));
+      items.forEach(src => PHOTOS.push({ src, cat:'Travel', trip:tripName, caption:'' }));
     });
   }
 
@@ -203,6 +233,50 @@ permalink: /gallery/
     });
   }
 
+  // Treat files such as "IMG_4107.jpeg" and "IMG_4107 (1).jpeg" as the same photo.
+  function photoKey(src) {
+    return src
+      .toLowerCase()
+      .replace(/\s*\(\d+\)(?=\.[^.]+$)/, '');
+  }
+
+  function dedupePhotos(list) {
+    const seen = new Set();
+    return list.filter(p => {
+      const key = photoKey(p.src);
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }
+
+  // Mix categories together on the All tab so the first screen is not only Nature photos.
+  function interleaveCategories(list) {
+    const groups = new Map();
+
+    list.forEach(p => {
+      if (!groups.has(p.cat)) groups.set(p.cat, []);
+      groups.get(p.cat).push(p);
+    });
+
+    const order = ['Nature', 'Travel', 'Skyline', 'Victory Garden Initiative'];
+    const mixed = [];
+    let added = true;
+
+    while (added) {
+      added = false;
+      order.forEach(cat => {
+        const group = groups.get(cat);
+        if (group && group.length) {
+          mixed.push(group.shift());
+          added = true;
+        }
+      });
+    }
+
+    return mixed;
+  }
+
   function getFilteredPhotos() {
     let list = PHOTOS;
 
@@ -214,17 +288,30 @@ permalink: /gallery/
       list = list.filter(p => p.trip === ACTIVE_TRIP);
     }
 
+    list = dedupePhotos(list);
+
+    if (ACTIVE_CAT === 'All') {
+      list = interleaveCategories(list);
+    }
+
     return list;
   }
 
-  function appendPhoto(p) {
+  function appendPhoto(p, displayIndex) {
     const fig = document.createElement('figure');
     fig.className = 'gal-item';
+
+    // Give the layout an editorial feel: occasional large and tall images.
+    if (displayIndex % 11 === 0) {
+      fig.classList.add('gal-featured');
+    } else if (displayIndex % 5 === 0) {
+      fig.classList.add('gal-tall');
+    }
 
     const img = document.createElement('img');
     img.loading = 'lazy';
     img.decoding = 'async';
-    img.src = encodeURI(p.src); // IMPORTANT for spaces like "(1)"
+    img.src = encodeURI(p.src);
     img.alt = p.caption || '';
     img.addEventListener('click', () => openLB(p));
 
@@ -242,7 +329,7 @@ permalink: /gallery/
 
   function renderNextBatch() {
     const nextPhotos = FILTERED_PHOTOS.slice(RENDERED_COUNT, RENDERED_COUNT + BATCH_SIZE);
-    nextPhotos.forEach(appendPhoto);
+    nextPhotos.forEach((p, i) => appendPhoto(p, RENDERED_COUNT + i));
     RENDERED_COUNT += nextPhotos.length;
     loadMoreBtn.hidden = RENDERED_COUNT >= FILTERED_PHOTOS.length;
   }
@@ -304,7 +391,6 @@ permalink: /gallery/
     initFromURL();
     await loadManifest();
 
-    // If trip param isn't valid, fall back to All Travel
     if (ACTIVE_CAT === 'Travel' && ACTIVE_TRIP !== 'All' && !TRIPS.includes(ACTIVE_TRIP)) {
       ACTIVE_TRIP = 'All';
     }
