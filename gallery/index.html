@@ -29,8 +29,20 @@ permalink: /gallery/
   @media (min-width: 1200px){ .gal-grid { column-count: 4; } }
 
   .gal-item { break-inside: avoid; margin: 0 0 14px; position:relative; }
-  .gal-item img { width:100%; display:block; border-radius:12px; }
+  .gal-item img { width:100%; display:block; border-radius:12px; cursor:zoom-in; }
   .gal-cap { font-size:.85rem; color:var(--muted); margin:.35rem .25rem 0; }
+
+  .gal-load-wrap { text-align:center; margin:1.5rem 0 0; }
+  .gal-load-more {
+    padding:.65rem 1rem;
+    border-radius:999px;
+    border:1px solid var(--border);
+    background:var(--chip);
+    color:var(--ink);
+    cursor:pointer;
+  }
+  .gal-load-more:hover { background:var(--chip-active); }
+  .gal-load-more[hidden] { display:none; }
 
   /* Lightbox (native <dialog>) */
   dialog.gal-lb { border:none; padding:0; background:rgba(0,0,0,.6); }
@@ -47,6 +59,10 @@ permalink: /gallery/
   <div class="gal-subtabs" id="subtabs" style="display:none;"></div>
   <div class="gal-grid" id="grid" aria-live="polite"></div>
 
+  <div class="gal-load-wrap">
+    <button class="gal-load-more" id="loadMoreBtn" type="button" hidden>Load more photos</button>
+  </div>
+
   <dialog class="gal-lb" id="lb">
     <div class="gal-lb-inner">
       <button class="gal-close" id="lbClose">Close ✕</button>
@@ -60,15 +76,19 @@ permalink: /gallery/
   // Top-level categories MUST match keys in assets/gallery/photos.json
   // Travel is special: photos.json is expected to have "Travel": { "Trip Name": [ ... ], ... }
   const CATS = ['All','Nature','Travel','Skyline','Victory Garden Initiative'];
+  const BATCH_SIZE = 24;
 
   let PHOTOS = [];
   let TRIPS = [];              // Travel subcategory names (from manifest)
   let ACTIVE_CAT = 'All';
   let ACTIVE_TRIP = 'All';     // 'All' means "All Travel"
+  let FILTERED_PHOTOS = [];
+  let RENDERED_COUNT = 0;
 
   const tabs = document.getElementById('tabs');
   const subtabs = document.getElementById('subtabs');
   const grid = document.getElementById('grid');
+  const loadMoreBtn = document.getElementById('loadMoreBtn');
   const lb = document.getElementById('lb');
   const lbImg = document.getElementById('lbImg');
   const lbCap = document.getElementById('lbCap');
@@ -145,9 +165,7 @@ permalink: /gallery/
     });
   }
 
-  function render() {
-    grid.innerHTML = '';
-
+  function getFilteredPhotos() {
     let list = PHOTOS;
 
     if (ACTIVE_CAT !== 'All') {
@@ -158,28 +176,45 @@ permalink: /gallery/
       list = list.filter(p => p.trip === ACTIVE_TRIP);
     }
 
-    list.forEach(p => {
-      const fig = document.createElement('figure');
-      fig.className = 'gal-item';
+    return list;
+  }
 
-      const img = document.createElement('img');
-      img.loading = 'lazy';
-      img.src = encodeURI(p.src); // IMPORTANT for spaces like "(1)"
-      img.alt = p.caption || '';
-      img.addEventListener('click', () => openLB(p));
+  function appendPhoto(p) {
+    const fig = document.createElement('figure');
+    fig.className = 'gal-item';
 
-      fig.appendChild(img);
+    const img = document.createElement('img');
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.src = encodeURI(p.src); // IMPORTANT for spaces like "(1)"
+    img.alt = p.caption || '';
+    img.addEventListener('click', () => openLB(p));
 
-      if (p.caption) {
-        const cap = document.createElement('figcaption');
-        cap.className = 'gal-cap';
-        cap.textContent = p.caption;
-        fig.appendChild(cap);
-      }
+    fig.appendChild(img);
 
-      grid.appendChild(fig);
-    });
+    if (p.caption) {
+      const cap = document.createElement('figcaption');
+      cap.className = 'gal-cap';
+      cap.textContent = p.caption;
+      fig.appendChild(cap);
+    }
 
+    grid.appendChild(fig);
+  }
+
+  function renderNextBatch() {
+    const nextPhotos = FILTERED_PHOTOS.slice(RENDERED_COUNT, RENDERED_COUNT + BATCH_SIZE);
+    nextPhotos.forEach(appendPhoto);
+    RENDERED_COUNT += nextPhotos.length;
+    loadMoreBtn.hidden = RENDERED_COUNT >= FILTERED_PHOTOS.length;
+  }
+
+  function render() {
+    grid.innerHTML = '';
+    FILTERED_PHOTOS = getFilteredPhotos();
+    RENDERED_COUNT = 0;
+
+    renderNextBatch();
     buildTabs();
     buildSubtabs();
     syncURL();
@@ -194,6 +229,7 @@ permalink: /gallery/
 
   lbClose.onclick = () => lb.close();
   lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
+  loadMoreBtn.addEventListener('click', renderNextBatch);
 
   function selectCat(cat){
     ACTIVE_CAT = cat;
