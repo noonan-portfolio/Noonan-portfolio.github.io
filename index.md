@@ -294,6 +294,8 @@ body:has(#home) .page__title {
   #home article:hover { transform: none; }
 }
 
+#home .header-link { display: none; }
+
 /* Phase 3.3: ambient breathing, with stationary text */
 #home > header,
 #home article,
