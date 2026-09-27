@@ -399,12 +399,96 @@ body:has(#home) .page__title {
   #home article:nth-of-type(2)::after { animation-duration: 8.1s; animation-delay: -3s; }
   #home article:nth-of-type(3)::after { animation-duration: 7.4s; animation-delay: -5s; }
 }
+
+/* Phase 3 refinement: a shared breathing rhythm across primary elements */
+#home .hero-accent { color: #b4efc0; }
+#home nav[aria-label="Homepage links"] a {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+#home nav[aria-label="Homepage links"] a::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 100%, rgba(255, 255, 255, .3), transparent 75%);
+  opacity: .18;
+}
+#home nav[aria-label="Homepage links"] a:not(:first-child)::before {
+  background: radial-gradient(ellipse at 50% 100%, rgba(130, 226, 150, .32), transparent 75%);
+}
+#home > section > h2 {
+  position: relative;
+}
+#home > section > h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 84px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--home-green);
+  transform-origin: left center;
+}
+#home section[aria-labelledby="approach-title"] li {
+  position: relative;
+  padding-left: 1.25rem;
+}
+#home section[aria-labelledby="approach-title"] li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1.85rem;
+  width: .42rem;
+  height: .42rem;
+  border-radius: 50%;
+  background: var(--home-green);
+  opacity: .75;
+  box-shadow: 0 0 0 4px rgba(153, 229, 169, .08);
+}
+#home section[aria-labelledby="approach-title"] li:first-child::before { top: .72rem; }
+#home article::after { width: 68px; height: 3px; }
+#home > footer a::after {
+  content: "";
+  display: inline-block;
+  width: .35rem;
+  height: .35rem;
+  margin-left: .55rem;
+  border-radius: 50%;
+  background: currentColor;
+  vertical-align: middle;
+  opacity: .75;
+}
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes headline-breathe {
+    0%, 100% { color: #e8f0e9; text-shadow: 0 0 0 rgba(116, 228, 142, 0); }
+    43% { color: #99e5a9; text-shadow: 0 0 26px rgba(116, 228, 142, .24); }
+    77% { color: #c9f0d0; text-shadow: 0 0 12px rgba(116, 228, 142, .1); }
+  }
+  @keyframes light-breathe {
+    0%, 100% { opacity: .08; transform: scale(.92); }
+    44% { opacity: .55; transform: scale(1.12); }
+    78% { opacity: .22; transform: scale(1); }
+  }
+  #home .hero-accent { animation: headline-breathe 9.2s ease-in-out infinite; }
+  #home nav[aria-label="Homepage links"] a::before { animation: light-breathe 7.3s ease-in-out infinite; }
+  #home nav[aria-label="Homepage links"] a:nth-child(2)::before { animation-duration: 8.6s; animation-delay: -2.7s; }
+  #home > section > h2::after { animation: line-breathe 7.8s ease-in-out infinite; }
+  #home section[aria-labelledby="work-title"] > h2::after { animation-duration: 9.1s; animation-delay: -3.3s; }
+  #home section[aria-labelledby="approach-title"] li::before { animation: accent-breathe 5.7s ease-in-out infinite; }
+  #home section[aria-labelledby="approach-title"] li:nth-child(2)::before { animation-duration: 6.5s; animation-delay: -2s; }
+  #home section[aria-labelledby="approach-title"] li:nth-child(3)::before { animation-duration: 5.9s; animation-delay: -4s; }
+  #home > footer a::after { animation: accent-breathe 5.8s ease-in-out infinite; }
+  #home > footer a:last-child::after { animation-delay: -2.6s; animation-duration: 6.7s; }
+}
 </style>
 
 <main id="home">
   <header aria-labelledby="home-title">
     <p>Joseph Noonan · Developer</p>
-    <h1 id="home-title">I build practical tools for real problems.</h1>
+    <h1 id="home-title">I build practical tools for <span class="hero-accent">real problems.</span></h1>
     <p>
       I work across interfaces, backend logic, and data to make useful systems
       clear and dependable. This is a selection of what I have built and how I think.
