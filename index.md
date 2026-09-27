@@ -293,6 +293,63 @@ body:has(#home) .page__title {
   #home section[aria-labelledby="approach-title"] li:hover,
   #home article:hover { transform: none; }
 }
+
+/* Phase 3.3: ambient breathing, with stationary text */
+#home > header,
+#home article,
+#home > footer {
+  position: relative;
+  isolation: isolate;
+}
+#home > header { overflow: hidden; }
+#home > header > *,
+#home article > *,
+#home > footer > * { position: relative; z-index: 1; }
+#home > header::before,
+#home article::before,
+#home > footer::before {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+}
+#home > header::before {
+  inset: 2% -12% 0 34%;
+  background: radial-gradient(ellipse at 55% 47%, rgba(73, 163, 99, .31), transparent 65%);
+  opacity: .42;
+  transform: scale(.96);
+}
+#home article::before {
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(ellipse at 82% 12%, rgba(119, 212, 141, .18), transparent 57%);
+  opacity: .24;
+}
+#home > footer::before {
+  width: 42%;
+  height: 100%;
+  right: 0;
+  top: 0;
+  background: radial-gradient(ellipse at center, rgba(80, 158, 97, .14), transparent 70%);
+  opacity: .28;
+}
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes home-breathe {
+    0%, 100% { opacity: .26; transform: scale(.96); }
+    38% { opacity: .52; transform: scale(1.065); }
+    73% { opacity: .34; transform: scale(1.015); }
+  }
+  @keyframes surface-breathe {
+    0%, 100% { opacity: .16; transform: scale(1); }
+    43% { opacity: .38; transform: scale(1.035); }
+    79% { opacity: .22; transform: scale(1.01); }
+  }
+  #home > header::before { animation: home-breathe 14.3s cubic-bezier(.45, 0, .3, 1) infinite; }
+  #home article::before { animation: surface-breathe 11.6s ease-in-out infinite; }
+  #home article:nth-of-type(2)::before { animation-duration: 13.4s; animation-delay: -4.2s; }
+  #home article:nth-of-type(3)::before { animation-duration: 10.8s; animation-delay: -6.8s; }
+  #home > footer::before { animation: surface-breathe 16.1s ease-in-out infinite; animation-delay: -3.5s; }
+}
 </style>
 
 <main id="home">
