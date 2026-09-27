@@ -214,6 +214,81 @@ body:has(#home) .page__title {
     transition: none;
   }
 }
+
+/* Phase 3.2: attention states */
+#home article,
+#home nav[aria-label="Homepage links"] a,
+#home section[aria-labelledby="approach-title"] li,
+#home article a,
+#home > footer a {
+  transition-property: transform, background-color, border-color, box-shadow, color;
+  transition-duration: .32s;
+  transition-timing-function: cubic-bezier(.22, 1, .36, 1);
+}
+#home article:focus-within {
+  border-color: #72b984;
+  background-color: #14251a;
+  box-shadow: 0 16px 42px rgba(0, 0, 0, .22), inset 0 0 0 1px rgba(153, 229, 169, .1);
+}
+#home nav[aria-label="Homepage links"] a:focus-visible {
+  border-color: var(--home-green);
+  box-shadow: 0 0 0 4px rgba(153, 229, 169, .12);
+}
+#home nav[aria-label="Homepage links"] a:first-child:focus-visible {
+  background: #b8efc2;
+}
+#home nav[aria-label="Homepage links"] a:not(:first-child):focus-visible {
+  background: #15271b;
+}
+#home article a::after {
+  content: "↗";
+  display: inline-block;
+  margin-left: .35em;
+  opacity: 0;
+  transform: translate(-4px, 3px);
+  transition: opacity .25s ease, transform .35s cubic-bezier(.22, 1, .36, 1);
+}
+#home article:focus-within a::after {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+#home > footer a:focus-visible { color: #d8ffe0; }
+@media (hover: hover) and (pointer: fine) {
+  body:has(#home) .masthead a:hover { color: #b8efc2; }
+  #home nav[aria-label="Homepage links"] a:hover { transform: translateY(-3px); }
+  #home nav[aria-label="Homepage links"] a:first-child:hover {
+    background: #b8efc2;
+    border-color: #b8efc2;
+    box-shadow: 0 10px 28px rgba(66, 147, 83, .16);
+  }
+  #home nav[aria-label="Homepage links"] a:not(:first-child):hover {
+    border-color: #72b984;
+    background: #15271b;
+  }
+  #home section[aria-labelledby="approach-title"] li:hover {
+    transform: translateX(5px);
+    border-color: #5b936a;
+  }
+  #home section[aria-labelledby="approach-title"] li:hover strong { color: var(--home-green); }
+  #home article:hover {
+    transform: translateY(-5px);
+    border-color: #72b984;
+    box-shadow: 0 16px 42px rgba(0, 0, 0, .22), inset 0 0 0 1px rgba(153, 229, 169, .1);
+  }
+  #home article:hover a::after { opacity: 1; transform: translate(0, 0); }
+  #home > footer a:hover { color: #d8ffe0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #home article,
+  #home nav[aria-label="Homepage links"] a,
+  #home section[aria-labelledby="approach-title"] li,
+  #home article a,
+  #home article a::after,
+  #home > footer a { transition: none; }
+  #home nav[aria-label="Homepage links"] a:hover,
+  #home section[aria-labelledby="approach-title"] li:hover,
+  #home article:hover { transform: none; }
+}
 </style>
 
 <main id="home">
