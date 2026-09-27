@@ -787,6 +787,9 @@ body:has(#home) .page__title {
     if (study.classList.contains('show-fact')) close();
     else launch();
   });
+  document.addEventListener('pointerdown', event => {
+    if (!study.contains(event.target)) close();
+  });
   study.addEventListener('focusout', event => {
     if (!study.contains(event.relatedTarget)) close();
   });
