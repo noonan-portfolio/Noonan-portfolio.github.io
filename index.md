@@ -240,17 +240,21 @@ body:has(#home) .page__title {
 #home nav[aria-label="Homepage links"] a:not(:first-child):focus-visible {
   background: #15271b;
 }
-#home article a::after {
-  content: "↗";
+#home article > a::after {
+  content: "";
   display: inline-block;
-  margin-left: .35em;
+  width: .43em;
+  height: .43em;
+  margin-left: .45em;
+  border-top: 1.5px solid currentColor;
+  border-right: 1.5px solid currentColor;
   opacity: 0;
-  transform: translate(-4px, 3px);
+  transform: translate(-4px, 3px) rotate(45deg);
   transition: opacity .25s ease, transform .35s cubic-bezier(.22, 1, .36, 1);
 }
-#home article:focus-within a::after {
+#home article:focus-within > a::after {
   opacity: 1;
-  transform: translate(0, 0);
+  transform: translate(0, 0) rotate(45deg);
 }
 #home > footer a:focus-visible { color: #d8ffe0; }
 @media (hover: hover) and (pointer: fine) {
@@ -275,7 +279,7 @@ body:has(#home) .page__title {
     border-color: #72b984;
     box-shadow: 0 16px 42px rgba(0, 0, 0, .22), inset 0 0 0 1px rgba(153, 229, 169, .1);
   }
-  #home article:hover a::after { opacity: 1; transform: translate(0, 0); }
+  #home article:hover > a::after { opacity: 1; transform: translate(0, 0) rotate(45deg); }
   #home > footer a:hover { color: #d8ffe0; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -283,7 +287,7 @@ body:has(#home) .page__title {
   #home nav[aria-label="Homepage links"] a,
   #home section[aria-labelledby="approach-title"] li,
   #home article a,
-  #home article a::after,
+  #home article > a::after,
   #home > footer a { transition: none; }
   #home nav[aria-label="Homepage links"] a:hover,
   #home section[aria-labelledby="approach-title"] li:hover,
