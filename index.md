@@ -483,6 +483,117 @@ body:has(#home) .page__title {
   #home > footer a::after { animation: accent-breathe 5.8s ease-in-out infinite; }
   #home > footer a:last-child::after { animation-delay: -2.6s; animation-duration: 6.7s; }
 }
+
+/* Phase 4.1: one interactive anatomical bird study */
+#home .bird-study {
+  float: right;
+  width: min(270px, 42%);
+  margin: -1.4rem 0 1rem 2rem;
+  color: var(--home-green);
+}
+#home .bird-trigger {
+  display: block;
+  width: 100%;
+  padding: .35rem;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  text-align: center;
+}
+#home .bird-trigger:focus-visible {
+  outline: 2px solid var(--home-green);
+  outline-offset: 3px;
+}
+#home .bird-caption,
+#home .bird-prompt {
+  display: block;
+  color: var(--home-muted);
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .18em;
+}
+#home .bird-caption { text-align: right; }
+#home .bird-prompt { text-align: center; margin-top: -.15rem; }
+#home .bird-figure {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  margin: .2rem auto 0;
+  color: #9ceeb1;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 7px rgba(106, 221, 134, .28));
+}
+#home .bird-wing { transform-box: view-box; }
+#home .bird-wing-left { transform-origin: 105px 68px; }
+#home .bird-wing-right { transform-origin: 115px 67px; }
+#home .bird-trigger:hover .bird-prompt,
+#home .bird-trigger:focus-visible .bird-prompt { color: var(--home-green); }
+#home .bird-fact[hidden] { display: none; }
+#home .bird-fact {
+  margin-top: .3rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid #477956;
+  border-radius: 10px;
+  background: #112018;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, .24);
+  color: var(--home-text);
+}
+#home .bird-fact-label {
+  margin: 0 0 .4rem;
+  color: var(--home-green);
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+}
+#home .bird-fact h3 { margin: 0 0 .4rem; font-size: 1.08rem; letter-spacing: -.02em; }
+#home .bird-fact p:not(.bird-fact-label) { margin: 0 0 .75rem; color: var(--home-muted); font-size: .83rem; line-height: 1.5; }
+#home .bird-fact dl { margin: 0 0 .7rem; }
+#home .bird-fact dl div { display: flex; justify-content: space-between; gap: .5rem; padding: .28rem 0; border-top: 1px solid var(--home-border); font-size: .77rem; }
+#home .bird-fact dt { color: var(--home-muted); }
+#home .bird-fact dd { margin: 0; color: var(--home-text); }
+#home .bird-fact a { margin: 0; font-size: .75rem; }
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes bird-idle {
+    0%, 100% { transform: translate3d(0, 0, 0) rotate(-1deg); }
+    42% { transform: translate3d(0, -4px, 0) rotate(1.5deg); }
+    73% { transform: translate3d(0, -1px, 0) rotate(0deg); }
+  }
+  @keyframes bird-flight {
+    0%, 100% { transform: translate3d(0, 0, 0) rotate(0); }
+    25% { transform: translate3d(12px, -16px, 0) rotate(-4deg); }
+    55% { transform: translate3d(24px, -10px, 0) rotate(2deg); }
+    78% { transform: translate3d(8px, -4px, 0) rotate(-1deg); }
+  }
+  @keyframes bird-left-flap {
+    0%, 100% { transform: rotate(0); }
+    30%, 67% { transform: rotate(13deg); }
+    48% { transform: rotate(-11deg); }
+  }
+  @keyframes bird-right-flap {
+    0%, 100% { transform: rotate(0); }
+    30%, 67% { transform: rotate(-13deg); }
+    48% { transform: rotate(11deg); }
+  }
+  @keyframes bird-card-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  #home .bird-figure { animation: bird-idle 7.8s ease-in-out infinite; }
+  #home .bird-study.in-flight .bird-figure { animation: bird-flight 1.1s cubic-bezier(.22, 1, .36, 1) both; }
+  #home .bird-study.in-flight .bird-wing-left { animation: bird-left-flap 1.1s ease-in-out both; }
+  #home .bird-study.in-flight .bird-wing-right { animation: bird-right-flap 1.1s ease-in-out both; }
+  #home .bird-study.show-fact .bird-fact { animation: bird-card-in .32s cubic-bezier(.22, 1, .36, 1) both; }
+}
+@media (max-width: 760px) {
+  #home .bird-study { float: none; width: min(270px, 100%); margin: 2rem auto 0; }
+}
 </style>
 
 <main id="home">
@@ -548,6 +659,43 @@ body:has(#home) .page__title {
   </section>
 
   <footer id="contact" aria-labelledby="contact-title">
+    <div class="bird-study" aria-label="Interactive bird study">
+      <button class="bird-trigger" type="button" aria-label="Inspect American Kestrel" aria-controls="kestrel-fact" aria-expanded="false">
+        <span class="bird-caption">01 / FIELD STUDY · HOVER OR TAP</span>
+        <svg class="bird-figure" viewBox="0 0 220 145" aria-hidden="true" focusable="false">
+          <g class="bird-wing bird-wing-left">
+            <path d="M105 68 76 47 42 29 14 24M76 47 47 57 17 65M61 39 34 40 13 45M49 33 30 29 12 31"/>
+            <path d="M47 57 35 70M37 59 25 72M27 62 17 75M42 29 30 20M33 29 22 18"/>
+            <path d="M14 24 18 37 13 45M17 65 20 56 13 45"/>
+            <circle cx="76" cy="47" r="2.4"/><circle cx="42" cy="29" r="2"/>
+          </g>
+          <g class="bird-wing bird-wing-right">
+            <path d="M115 67 147 43 179 26 207 20M147 43 177 55 208 65M162 34 190 37 210 44M179 26 195 18 213 17"/>
+            <path d="M177 55 190 68M188 59 202 72M198 62 210 76M179 26 188 16M189 29 201 15"/>
+            <path d="M207 20 203 35 210 44M208 65 203 55 210 44"/>
+            <circle cx="147" cy="43" r="2.4"/><circle cx="179" cy="26" r="2"/>
+          </g>
+          <g class="bird-core">
+            <path d="M104 68 Q111 57 125 58 Q139 60 143 72 Q142 91 125 101 Q108 99 101 82Z"/>
+            <path d="M110 64 Q117 70 129 70M105 72 Q118 78 137 75M104 80 Q118 87 134 82M109 89 Q120 94 129 89"/>
+            <path d="M121 60 Q128 53 135 52M135 51 Q143 46 151 51 Q155 56 149 62 Q143 66 137 60Z"/>
+            <path d="M151 53 166 49 151 60 157 57M111 96 95 123M117 99 109 129M123 100 122 127M129 97 135 122"/>
+            <path d="M116 96 106 108 102 118M127 95 135 107 141 114M102 118 95 120 101 122M141 114 146 117 139 119"/>
+            <circle cx="147" cy="54" r="1.1" fill="currentColor" stroke="none"/>
+            <path d="M107 67 Q104 75 106 84M125 68 Q132 75 128 88" stroke-dasharray="2 4"/>
+          </g>
+        </svg>
+        <span class="bird-prompt">AMERICAN KESTREL <span aria-hidden="true">↗</span></span>
+      </button>
+      <aside class="bird-fact" id="kestrel-fact" hidden>
+        <p class="bird-fact-label">FIELD NOTE 01</p>
+        <h3>American Kestrel</h3>
+        <p>North America’s smallest falcon. It can hover into the wind while hunting.</p>
+        <dl><div><dt>Length</dt><dd>8.7–12.2 in</dd></div><div><dt>Wingspan</dt><dd>20.1–24 in</dd></div></dl>
+        <a href="https://www.allaboutbirds.org/guide/American_Kestrel/id" target="_blank" rel="noopener noreferrer">Cornell Lab field guide</a>
+      </aside>
+    </div>
+    
     <h2 id="contact-title">Let’s connect</h2>
     <p>Interested in the work or want to talk through a project?</p>
     <a href="https://github.com/noonan-portfolio">Find me on GitHub</a>
@@ -591,5 +739,62 @@ body:has(#home) .page__title {
 
   configureReveals();
   reducedMotion.addEventListener('change', configureReveals);
+})();
+</script>
+
+<script>
+(() => {
+  const study = document.querySelector('#home .bird-study');
+  const button = study?.querySelector('.bird-trigger');
+  const fact = study?.querySelector('.bird-fact');
+  if (!button || !fact) return;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let timer;
+
+  function close() {
+    window.clearTimeout(timer);
+    study.classList.remove('in-flight', 'show-fact');
+    fact.hidden = true;
+    button.setAttribute('aria-expanded', 'false');
+  }
+  function reveal() {
+    study.classList.remove('in-flight');
+    fact.hidden = false;
+    study.classList.add('show-fact');
+    button.setAttribute('aria-expanded', 'true');
+  }
+  function launch() {
+    if (study.classList.contains('in-flight') || study.classList.contains('show-fact')) return;
+    if (reducedMotion.matches) { reveal(); return; }
+    study.classList.add('in-flight');
+    timer = window.setTimeout(reveal, 1100);
+  }
+
+  button.addEventListener('pointerenter', event => {
+    if (event.pointerType === 'mouse') launch();
+  });
+  study.addEventListener('pointerleave', event => {
+    if (event.pointerType === 'mouse' && !button.matches(':focus-visible')) close();
+  });
+  button.addEventListener('focus', () => {
+    if (button.matches(':focus-visible')) launch();
+  });
+  button.addEventListener('click', event => {
+    if (event.detail === 0 || window.matchMedia('(hover: hover)').matches) {
+      launch();
+      return;
+    }
+    if (study.classList.contains('show-fact')) close();
+    else launch();
+  });
+  study.addEventListener('focusout', event => {
+    if (!study.contains(event.relatedTarget)) close();
+  });
+  study.addEventListener('keydown', event => {
+    if (event.key === 'Escape') { close(); button.focus(); }
+  });
+  reducedMotion.addEventListener('change', () => {
+    if (reducedMotion.matches && study.classList.contains('in-flight')) reveal();
+  });
 })();
 </script>
