@@ -193,6 +193,27 @@ body:has(#home) .page__title {
   #home article { min-height: 0; margin-top: 1rem; }
   #home > footer { padding-top: 4rem; }
 }
+
+/* Phase 3.1: scroll reveals */
+@media (prefers-reduced-motion: no-preference) {
+  #home.motion-ready .reveal:not(.is-visible) {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+  }
+  #home.motion-ready .reveal {
+    transition:
+      opacity .7s cubic-bezier(.22, 1, .36, 1),
+      transform .8s cubic-bezier(.22, 1, .36, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #home.motion-ready .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
 </style>
 
 <main id="home">
@@ -264,3 +285,42 @@ body:has(#home) .page__title {
     <a href="/about/">More about me</a>
   </footer>
 </main>
+
+<script>
+(() => {
+  const home = document.getElementById('home');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const groups = home.querySelectorAll(':scope > section, :scope > footer');
+  const targets = [];
+
+  groups.forEach(group => {
+    const items = group.querySelectorAll(':scope > h2, :scope > p, :scope > ul > li, :scope > article, :scope > a');
+    items.forEach((item, index) => {
+      item.classList.add('reveal');
+      item.style.setProperty('--reveal-delay', Math.min(index, 3) * 75 + 'ms');
+      targets.push(item);
+    });
+  });
+
+  let observer;
+  function configureReveals() {
+    observer?.disconnect();
+    if (reducedMotion.matches || !('IntersectionObserver' in window)) {
+      home.classList.remove('motion-ready');
+      return;
+    }
+    home.classList.add('motion-ready');
+    observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -5% 0px' });
+    targets.filter(item => !item.classList.contains('is-visible')).forEach(item => observer.observe(item));
+  }
+
+  configureReveals();
+  reducedMotion.addEventListener('change', configureReveals);
+})();
+</script>
