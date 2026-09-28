@@ -483,6 +483,37 @@ body:has(#home) .page__title {
   #home > footer a::after { animation: accent-breathe 5.8s ease-in-out infinite; }
   #home > footer a:last-child::after { animation-delay: -2.6s; animation-duration: 6.7s; }
 }
+
+/* Phase 4.2: featured-work proximity light */
+#home section[aria-labelledby="work-title"] article {
+  --spot-x: 50%;
+  --spot-y: 50%;
+  --spot-alpha: 0;
+  background-image: radial-gradient(220px circle at var(--spot-x) var(--spot-y), rgba(153, 229, 169, var(--spot-alpha)), transparent 78%);
+}
+#home section[aria-labelledby="work-title"] article:first-of-type {
+  background-image:
+    radial-gradient(270px circle at var(--spot-x) var(--spot-y), rgba(153, 229, 169, var(--spot-alpha)), transparent 78%),
+    linear-gradient(125deg, #13271b, #0d1511 72%);
+}
+#home section[aria-labelledby="work-title"] article:focus-within,
+#home section[aria-labelledby="work-title"] article:active {
+  --spot-alpha: .3;
+}
+#home section[aria-labelledby="work-title"] article:focus-within {
+  --spot-x: 65%;
+  --spot-y: 25%;
+}
+@media (prefers-reduced-motion: reduce) {
+  #home section[aria-labelledby="work-title"] article {
+    --spot-alpha: 0;
+  }
+  #home section[aria-labelledby="work-title"] article:focus-within,
+  #home section[aria-labelledby="work-title"] article:active {
+    --spot-alpha: .25;
+  }
+}
+
 </style>
 
 <main id="home">
@@ -591,5 +622,48 @@ body:has(#home) .page__title {
 
   configureReveals();
   reducedMotion.addEventListener('change', configureReveals);
+})();
+</script>
+
+<script>
+(() => {
+  const work = document.querySelector('#home section[aria-labelledby="work-title"]');
+  const cards = [...work.querySelectorAll('article')];
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let pending = 0;
+  let point;
+
+  function reset() {
+    cancelAnimationFrame(pending);
+    pending = 0;
+    cards.forEach(card => {
+      card.style.removeProperty('--spot-x');
+      card.style.removeProperty('--spot-y');
+      card.style.removeProperty('--spot-alpha');
+    });
+  }
+  function paint() {
+    pending = 0;
+    cards.forEach(card => {
+      const rect = card.getBoundingClientRect();
+      const x = Math.max(rect.left, Math.min(point.x, rect.right));
+      const y = Math.max(rect.top, Math.min(point.y, rect.bottom));
+      const distance = Math.hypot(point.x - x, point.y - y);
+      const strength = Math.max(0, 1 - distance / 180);
+      card.style.setProperty('--spot-x', (point.x - rect.left) + 'px');
+      card.style.setProperty('--spot-y', (point.y - rect.top) + 'px');
+      card.style.setProperty('--spot-alpha', (strength * .31).toFixed(3));
+    });
+  }
+  work.addEventListener('pointermove', event => {
+    if (event.pointerType !== 'mouse' || !finePointer.matches || reducedMotion.matches) return;
+    point = { x: event.clientX, y: event.clientY };
+    if (!pending) pending = requestAnimationFrame(paint);
+  });
+  work.addEventListener('pointerleave', reset);
+  work.addEventListener('focusin', reset);
+  finePointer.addEventListener('change', reset);
+  reducedMotion.addEventListener('change', reset);
 })();
 </script>
