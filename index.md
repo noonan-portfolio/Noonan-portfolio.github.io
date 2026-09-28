@@ -528,7 +528,7 @@ body:has(#home) .page__title {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   align-items: center;
-  padding: 7rem 0 7.5rem;
+  padding: 3.5rem 0 3.5rem;
   background: radial-gradient(ellipse 48% 68% at 78% 51%, rgba(29, 78, 45, .21), transparent 82%);
 }
 #home .hero-copy {
@@ -666,7 +666,7 @@ body:has(#home) .page__title {
   position: absolute;
   left: 20%;
   right: 8%;
-  bottom: 5%;
+  bottom: 8%;
   min-height: 72px;
   padding: .65rem 1rem;
   border-left: 2px solid var(--home-green);
@@ -707,7 +707,7 @@ body:has(#home) .page__title {
   #home > header.hero {
     display: block;
     min-height: 0;
-    padding: 4.8rem 0 3rem;
+    padding: 3.5rem 0 2rem;
   }
   #home .hero-copy { width: 100%; }
   #home .hero-copy h1 { font-size: clamp(3rem, 11vw, 5.3rem); }
