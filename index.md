@@ -496,6 +496,13 @@ body:has(#home) .page__title {
     radial-gradient(270px circle at var(--spot-x) var(--spot-y), rgba(153, 229, 169, var(--spot-alpha)), transparent 78%),
     linear-gradient(125deg, #13271b, #0d1511 72%);
 }
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  #home section[aria-labelledby="work-title"] article:hover {
+    --spot-x: 50%;
+    --spot-y: 35%;
+    --spot-alpha: .22;
+  }
+}
 #home section[aria-labelledby="work-title"] article:focus-within,
 #home section[aria-labelledby="work-title"] article:active {
   --spot-alpha: .3;
