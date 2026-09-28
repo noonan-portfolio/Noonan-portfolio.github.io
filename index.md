@@ -739,6 +739,159 @@ body:has(#home) .page__title {
   #home .hero-accent { animation: none; color: var(--home-green); }
 }
 
+
+/* Footer field study: a restrained lift through aligned Peregrine poses */
+#home .falcon-study {
+  position: relative;
+  min-height: 390px;
+  margin-top: 2.8rem;
+  border-top: 1px solid rgba(153, 229, 169, .16);
+  isolation: isolate;
+}
+#home .falcon-study::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 7%;
+  width: min(540px, 90%);
+  height: 240px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  background: radial-gradient(ellipse, rgba(60, 161, 83, .15), transparent 68%);
+  opacity: .7;
+}
+#home .falcon-trigger {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(520px, 100%);
+  padding: 0 .5rem .2rem;
+  border: 0;
+  background: transparent;
+  color: var(--home-green);
+  cursor: pointer;
+  text-align: center;
+  transform: translateX(-50%);
+}
+#home .falcon-trigger:focus-visible {
+  outline: 2px solid var(--home-green);
+  outline-offset: 5px;
+  border-radius: 10px;
+}
+#home .falcon-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 320px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 12px rgba(87, 213, 127, .14));
+  transform-origin: 50% 55%;
+}
+#home .falcon-prompt {
+  display: block;
+  margin-top: -.7rem;
+  color: #d6f7df;
+  font: 700 .7rem/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .17em;
+}
+#home .falcon-hint {
+  display: block;
+  margin-top: .32rem;
+  color: #91ae9a;
+  font: 600 .62rem/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .08em;
+}
+#home .falcon-trigger:hover .falcon-prompt,
+#home .falcon-trigger:focus-visible .falcon-prompt { color: #b5ffc7; }
+#home .falcon-fact[hidden] { display: none; }
+#home .falcon-fact {
+  position: absolute;
+  z-index: 3;
+  top: 1.5rem;
+  right: 0;
+  width: min(290px, 34%);
+  padding: 1.1rem 1.2rem;
+  border: 1px solid #518563;
+  border-radius: 10px;
+  background: #112018;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, .35);
+}
+#home .falcon-fact-kicker {
+  color: var(--home-green);
+  font: 700 .62rem/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .16em;
+}
+#home .falcon-fact h3 {
+  margin: .55rem 0;
+  font-size: 1.12rem;
+  letter-spacing: -.02em;
+}
+#home .falcon-fact p {
+  margin: 0 0 .8rem;
+  color: var(--home-muted);
+  font-size: .78rem;
+  line-height: 1.55;
+}
+#home .falcon-fact dl { margin: 0 0 .7rem; }
+#home .falcon-fact dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: .7rem;
+  padding: .29rem 0;
+  border-top: 1px solid var(--home-border);
+  font-size: .72rem;
+}
+#home .falcon-fact dt { color: var(--home-muted); }
+#home .falcon-fact dd { margin: 0; color: var(--home-text); white-space: nowrap; }
+#home .falcon-fact a {
+  display: inline-block;
+  margin: 0;
+  color: var(--home-green);
+  font-size: .72rem;
+}
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes falcon-idle {
+    0%, 100% { transform: translateY(0) rotate(-.5deg); }
+    42% { transform: translateY(-5px) rotate(.5deg); }
+    73% { transform: translateY(-2px) rotate(0); }
+  }
+  @keyframes falcon-lift {
+    0%, 100% { transform: translateY(0) rotate(0); }
+    42% { transform: translateY(-17px) rotate(-1deg); }
+    70% { transform: translateY(-12px) rotate(.5deg); }
+  }
+  @keyframes falcon-note-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  #home .falcon-image { animation: falcon-idle 8.3s ease-in-out infinite; }
+  #home .falcon-study.in-flight .falcon-image { animation: falcon-lift .93s cubic-bezier(.22, 1, .36, 1) both; }
+  #home .falcon-study.show-fact .falcon-fact { animation: falcon-note-in .35s cubic-bezier(.22, 1, .36, 1) both; }
+}
+@media (max-width: 760px) {
+  #home .falcon-study { min-height: 420px; margin-top: 2rem; }
+  #home .falcon-trigger { width: min(480px, 100%); }
+  #home .falcon-fact {
+    top: .25rem;
+    right: 50%;
+    width: min(320px, 90%);
+    transform: translateX(50%);
+  }
+}
+@media (max-width: 420px) {
+  #home .falcon-study { min-height: 385px; }
+  #home .falcon-image { max-height: 270px; }
+  #home .falcon-fact { padding: .85rem 1rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #home .falcon-image,
+  #home .falcon-study.in-flight .falcon-image,
+  #home .falcon-study.show-fact .falcon-fact { animation: none; }
+}
+
 </style>
 
 <main id="home">
@@ -822,6 +975,29 @@ body:has(#home) .page__title {
     <p>Interested in the work or want to talk through a project?</p>
     <a href="https://github.com/noonan-portfolio">Find me on GitHub</a>
     <a href="/about/">More about me</a>
+
+    <div class="falcon-study" aria-label="Peregrine Falcon field study">
+      <aside class="falcon-fact" id="peregrine-fact" aria-labelledby="peregrine-fact-title" hidden>
+        <span class="falcon-fact-kicker">FIELD NOTE / 01</span>
+        <h3 id="peregrine-fact-title">Peregrine Falcon</h3>
+        <p>A swift aerial hunter found on every continent except Antarctica.</p>
+        <dl>
+          <div><dt>Length</dt><dd>14.2–19.3 in</dd></div>
+          <div><dt>Wingspan</dt><dd>39.4–43.3 in</dd></div>
+          <div><dt>Hunting dive</dt><dd>up to ~200 mph</dd></div>
+        </dl>
+        <a href="https://www.allaboutbirds.org/guide/Peregrine_Falcon/id" target="_blank" rel="noopener noreferrer">Cornell Lab field guide</a>
+      </aside>
+      <button class="falcon-trigger" type="button" aria-label="Inspect Peregrine Falcon" aria-controls="peregrine-fact" aria-expanded="false"
+        data-rest="{{ '/assets/home/peregrine_01_rest.webp' | relative_url }}"
+        data-lift="{{ '/assets/home/peregrine_02_lift.webp' | relative_url }}"
+        data-rise="{{ '/assets/home/peregrine_03_rise.webp' | relative_url }}"
+        data-peak="{{ '/assets/home/peregrine_04_peak.webp' | relative_url }}">
+        <img class="falcon-image" src="{{ '/assets/home/peregrine_01_rest.webp' | relative_url }}" width="768" height="512" alt="" loading="lazy" decoding="async">
+        <span class="falcon-prompt">PEREGRINE FALCON <span aria-hidden="true">↗</span></span>
+        <span class="falcon-hint">Hover, focus, or tap to inspect</span>
+      </button>
+    </div>
   </footer>
 </main>
 
@@ -1104,5 +1280,98 @@ body:has(#home) .page__title {
   else window.addEventListener('resize', resize);
   resize();
   start();
+})();
+</script>
+
+<script>
+(() => {
+  const study = document.querySelector('#home .falcon-study');
+  if (!study) return;
+  const trigger = study.querySelector('.falcon-trigger');
+  const image = study.querySelector('.falcon-image');
+  const fact = study.querySelector('.falcon-fact');
+  const frames = [trigger.dataset.rest, trigger.dataset.lift, trigger.dataset.rise, trigger.dataset.peak];
+  const sequence = [0, 1, 2, 3, 2, 1, 0];
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let timer;
+  let generation = 0;
+  let playing = false;
+  let loaded;
+
+  function preload() {
+    if (!loaded) loaded = Promise.all(frames.slice(1).map(src => new Promise(resolve => {
+      const asset = new Image();
+      asset.onload = resolve;
+      asset.onerror = resolve;
+      asset.src = src;
+    })));
+    return loaded;
+  }
+  function reveal() {
+    playing = false;
+    study.classList.remove('in-flight');
+    fact.hidden = false;
+    trigger.setAttribute('aria-expanded', 'true');
+    study.classList.add('show-fact');
+  }
+  function close() {
+    generation++;
+    clearTimeout(timer);
+    playing = false;
+    image.src = frames[0];
+    study.classList.remove('in-flight', 'show-fact');
+    fact.hidden = true;
+    trigger.setAttribute('aria-expanded', 'false');
+  }
+  async function launch() {
+    if (playing || !fact.hidden) return;
+    const attempt = ++generation;
+    if (reducedMotion.matches) { reveal(); return; }
+    await preload();
+    if (attempt !== generation || reducedMotion.matches) return;
+    playing = true;
+    study.classList.add('in-flight');
+    let step = 0;
+    function next() {
+      if (attempt !== generation) return;
+      image.src = frames[sequence[step++]];
+      if (step < sequence.length) timer = setTimeout(next, step === 4 ? 165 : 112);
+      else timer = setTimeout(reveal, 125);
+    }
+    next();
+  }
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) { preload(); observer.disconnect(); }
+    }, { rootMargin: '400px' });
+    observer.observe(study);
+  }
+  trigger.addEventListener('pointerenter', event => {
+    if (event.pointerType !== 'touch') launch();
+  });
+  study.addEventListener('pointerleave', event => {
+    if (event.pointerType !== 'touch' && !study.contains(document.activeElement)) close();
+  });
+  trigger.addEventListener('focus', launch);
+  trigger.addEventListener('click', () => {
+    if (fact.hidden) launch();
+    else if (!window.matchMedia('(hover: hover)').matches) close();
+  });
+  study.addEventListener('focusout', event => {
+    if (!study.contains(event.relatedTarget)) close();
+  });
+  study.addEventListener('keydown', event => {
+    if (event.key === 'Escape') { close(); trigger.focus(); }
+  });
+  document.addEventListener('pointerdown', event => {
+    if (!study.contains(event.target) && !fact.hidden) close();
+  });
+  reducedMotion.addEventListener('change', () => {
+    if (reducedMotion.matches && playing) {
+      clearTimeout(timer);
+      image.src = frames[0];
+      reveal();
+    }
+  });
 })();
 </script>
