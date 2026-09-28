@@ -521,20 +521,252 @@ body:has(#home) .page__title {
   }
 }
 
+
+/* Signature hero: responsive living field */
+#home > header.hero {
+  min-height: 730px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  padding: 7rem 0 7.5rem;
+  background: radial-gradient(ellipse 48% 68% at 78% 51%, rgba(29, 78, 45, .21), transparent 82%);
+}
+#home .hero-copy {
+  position: relative;
+  z-index: 3;
+  width: min(65%, 690px);
+}
+#home .hero-copy > p:first-child {
+  margin: 0 0 1.75rem;
+  color: var(--home-green);
+  font-size: .76rem;
+  font-weight: 700;
+  letter-spacing: .19em;
+  text-transform: uppercase;
+}
+#home .hero-copy > p:first-child::before {
+  content: "";
+  display: inline-block;
+  width: .55rem;
+  height: .55rem;
+  margin-right: .85rem;
+  border-radius: 50%;
+  vertical-align: middle;
+  background: var(--home-green);
+  box-shadow: 0 0 0 5px rgba(153, 229, 169, .1);
+}
+#home .hero-copy h1 {
+  max-width: 730px;
+  font-size: clamp(3.4rem, 6.2vw, 6.25rem);
+  line-height: 1.025;
+}
+#home .hero-copy .hero-intro {
+  max-width: 600px;
+  margin: 2rem 0 0;
+  color: var(--home-muted);
+  font-size: clamp(1.04rem, 1.45vw, 1.22rem);
+  line-height: 1.65;
+}
+#home .hero-copy nav[aria-label="Homepage links"] { margin-top: 2.2rem; }
+#home .hero-invite {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  margin: 2.1rem 0 0;
+  color: #8eaa96;
+  font: 650 .68rem/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+#home .hero-invite > span:first-child {
+  width: 18px;
+  height: 1px;
+  background: var(--home-green);
+  box-shadow: 0 0 9px rgba(153, 229, 169, .7);
+}
+#home .hero-touch-note { display: none; }
+#home .hero-lab {
+  position: absolute;
+  z-index: 2;
+  top: 8%;
+  right: -3%;
+  width: 52%;
+  height: 84%;
+  min-height: 500px;
+  isolation: isolate;
+}
+#home .hero-lab::before {
+  content: "";
+  position: absolute;
+  inset: 8% 0 12%;
+  border-radius: 47% 53% 56% 44% / 46% 42% 58% 54%;
+  border: 1px solid rgba(129, 222, 151, .14);
+  background: radial-gradient(ellipse at 50% 50%, rgba(61, 155, 84, .12), rgba(12, 33, 20, .05) 48%, transparent 72%);
+  box-shadow: inset 0 0 55px rgba(73, 185, 99, .045), 0 0 80px rgba(56, 159, 77, .045);
+  pointer-events: none;
+}
+#home .hero-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+#home .hero-lab-label {
+  position: absolute;
+  top: 6%;
+  right: 8%;
+  color: #86a790;
+  font: 650 .62rem/1.3 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+#home .hero-node {
+  position: absolute;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+  padding: .65rem .88rem .65rem 2.05rem;
+  border: 1px solid rgba(151, 229, 169, .4);
+  border-radius: 99px;
+  background: rgba(10, 28, 17, .88);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, .24), 0 0 23px rgba(108, 217, 132, .06);
+  color: #d9f5df;
+  font: 700 .7rem/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color .3s ease, background .3s ease, border-color .3s ease, box-shadow .3s ease, scale .3s cubic-bezier(.22, 1, .36, 1);
+}
+#home .hero-node::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: .83rem;
+  width: .58rem;
+  height: .58rem;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  background: var(--home-green);
+  box-shadow: 0 0 0 4px rgba(153, 229, 169, .1), 0 0 14px rgba(153, 229, 169, .55);
+}
+#home .hero-node[data-mode="0"] { left: 72%; top: 26%; }
+#home .hero-node[data-mode="1"] { left: 24%; top: 49%; }
+#home .hero-node[data-mode="2"] { left: 70%; top: 69%; }
+#home .hero-node:hover,
+#home .hero-node:focus-visible,
+#home .hero-node.is-active {
+  background: #173d25;
+  color: #f1fff3;
+  border-color: #a9edb8;
+  box-shadow: 0 9px 30px rgba(0, 0, 0, .24), 0 0 26px rgba(105, 220, 133, .25);
+  scale: 1.055;
+}
+#home .hero-node:focus-visible { outline: 2px solid #d5ffdb; outline-offset: 4px; }
+#home .hero-readout {
+  position: absolute;
+  left: 20%;
+  right: 8%;
+  bottom: 5%;
+  min-height: 72px;
+  padding: .65rem 1rem;
+  border-left: 2px solid var(--home-green);
+  background: linear-gradient(90deg, rgba(9, 25, 15, .86), transparent);
+  pointer-events: none;
+}
+#home .hero-readout-index {
+  display: block;
+  margin-bottom: .35rem;
+  color: var(--home-green);
+  font: 700 .66rem/1.3 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .13em;
+}
+#home .hero-readout-text {
+  display: block;
+  color: #e6f4e8;
+  font-size: clamp(.9rem, 1.15vw, 1.03rem);
+  font-weight: 560;
+  letter-spacing: -.015em;
+}
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes node-breathe {
+    0%, 100% { box-shadow: 0 8px 28px rgba(0, 0, 0, .24), 0 0 12px rgba(108, 217, 132, .08); }
+    43% { box-shadow: 0 8px 28px rgba(0, 0, 0, .24), 0 0 28px rgba(108, 217, 132, .28); }
+    76% { box-shadow: 0 8px 28px rgba(0, 0, 0, .24), 0 0 18px rgba(108, 217, 132, .14); }
+  }
+  #home .hero-node { animation: node-breathe 6.9s ease-in-out infinite; }
+  #home .hero-node[data-mode="1"] { animation-duration: 8.1s; animation-delay: -2.8s; }
+  #home .hero-node[data-mode="2"] { animation-duration: 7.6s; animation-delay: -4.5s; }
+  #home .hero-copy > p:first-child::before { animation: accent-breathe 4.8s cubic-bezier(.45, 0, .3, 1) infinite; }
+}
+@media (max-width: 900px) {
+  #home .hero-copy { width: 68%; }
+  #home .hero-copy h1 { font-size: clamp(3.1rem, 6.3vw, 5.3rem); }
+  #home .hero-lab { right: -10%; width: 58%; }
+}
+@media (max-width: 760px) {
+  #home > header.hero {
+    display: block;
+    min-height: 0;
+    padding: 4.8rem 0 3rem;
+  }
+  #home .hero-copy { width: 100%; }
+  #home .hero-copy h1 { font-size: clamp(3rem, 11vw, 5.3rem); }
+  #home .hero-copy .hero-intro { max-width: 620px; }
+  #home .hero-invite { margin-top: 1.6rem; }
+  #home .hero-touch-note { display: inline; }
+  #home .hero-lab {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: min(100%, 520px);
+    height: 420px;
+    min-height: 0;
+    margin: 2.2rem auto 0;
+  }
+  #home .hero-node { font-size: .62rem; padding: .6rem .74rem .6rem 1.83rem; }
+  #home .hero-node::before { left: .72rem; width: .48rem; height: .48rem; }
+  #home .hero-readout { left: 12%; bottom: 2%; }
+}
+@media (max-width: 420px) {
+  #home .hero-lab { height: 350px; }
+  #home .hero-lab-label { right: 3%; font-size: .55rem; }
+  #home .hero-node[data-mode="1"] { left: 28%; }
+  #home .hero-readout { left: 9%; right: 2%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #home .hero-node,
+  #home .hero-copy > p:first-child::before { animation: none; transition: none; }
+  #home .hero-accent { animation: none; color: var(--home-green); }
+}
+
 </style>
 
 <main id="home">
-  <header aria-labelledby="home-title">
-    <p>Joseph Noonan · Developer</p>
-    <h1 id="home-title">I build practical tools for <span class="hero-accent">real problems.</span></h1>
-    <p>
-      I work across interfaces, backend logic, and data to make useful systems
-      clear and dependable. This is a selection of what I have built and how I think.
-    </p>
-    <nav aria-label="Homepage links">
-      <a href="/projects/">Explore my work</a>
-      <a href="#contact">Get in touch</a>
-    </nav>
+  <header class="hero" aria-labelledby="home-title">
+    <div class="hero-copy">
+      <p>Joseph Noonan · Developer</p>
+      <h1 id="home-title">I build practical tools for <span class="hero-accent">real problems.</span></h1>
+      <p class="hero-intro">
+        I work across interfaces, backend logic, and data to make useful systems
+        clear and dependable. This is a selection of what I have built and how I think.
+      </p>
+      <nav aria-label="Homepage links">
+        <a href="/projects/">Explore my work</a>
+        <a href="#contact">Get in touch</a>
+      </nav>
+      <p class="hero-invite"><span aria-hidden="true"></span> Explore the field <span class="hero-touch-note">· tap a point</span></p>
+    </div>
+    <div class="hero-lab" aria-label="Explore how I build">
+      <canvas class="hero-canvas" aria-hidden="true"></canvas>
+      <span class="hero-lab-label" aria-hidden="true">A living system / 001</span>
+      <button class="hero-node is-active" type="button" data-mode="0" aria-pressed="true">Interface</button>
+      <button class="hero-node" type="button" data-mode="1" aria-pressed="false">Logic</button>
+      <button class="hero-node" type="button" data-mode="2" aria-pressed="false">Data</button>
+      <div class="hero-readout" aria-live="polite">
+        <span class="hero-readout-index">01 / INTERFACE</span>
+        <strong class="hero-readout-text">Make the complex feel clear.</strong>
+      </div>
+    </div>
   </header>
 
   <section aria-labelledby="approach-title">
@@ -672,5 +904,205 @@ body:has(#home) .page__title {
   work.addEventListener('focusin', reset);
   finePointer.addEventListener('change', reset);
   reducedMotion.addEventListener('change', reset);
+})();
+</script>
+
+<script>
+(() => {
+  const lab = document.querySelector('#home .hero-lab');
+  const canvas = lab?.querySelector('canvas');
+  const context = canvas?.getContext('2d', { alpha: true });
+  if (!context) return;
+
+  const buttons = [...lab.querySelectorAll('.hero-node')];
+  const readoutIndex = lab.querySelector('.hero-readout-index');
+  const readoutText = lab.querySelector('.hero-readout-text');
+  const modes = [
+    ['01 / INTERFACE', 'Make the complex feel clear.'],
+    ['02 / LOGIC', 'Build dependable behavior beneath the surface.'],
+    ['03 / DATA', 'Turn information into something useful.']
+  ];
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let selected = 0;
+  let active = 0;
+  let width = 0;
+  let height = 0;
+  let ratio = 1;
+  let visible = true;
+  let frame = 0;
+  let last = 0;
+  let pulse = 0;
+  const pointer = { x: 0, y: 0, strength: 0, target: 0 };
+
+  function setMode(index, commit) {
+    if (commit) selected = index;
+    active = index;
+    readoutIndex.textContent = modes[index][0];
+    readoutText.textContent = modes[index][1];
+    buttons.forEach((button, i) => {
+      button.classList.toggle('is-active', i === index);
+      button.setAttribute('aria-pressed', String(i === selected));
+    });
+    pulse = 1;
+    if (reducedMotion.matches) draw(0);
+    else start();
+  }
+
+  buttons.forEach((button, index) => {
+    button.addEventListener('pointerenter', () => setMode(index, false));
+    button.addEventListener('pointerleave', () => setMode(selected, false));
+    button.addEventListener('focus', () => setMode(index, false));
+    button.addEventListener('blur', () => setMode(selected, false));
+    button.addEventListener('click', () => setMode(index, true));
+  });
+
+  function resize() {
+    const rect = lab.getBoundingClientRect();
+    width = Math.max(1, rect.width);
+    height = Math.max(1, rect.height);
+    ratio = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.round(width * ratio);
+    canvas.height = Math.round(height * ratio);
+    context.setTransform(ratio, 0, 0, ratio, 0, 0);
+    draw(reducedMotion.matches ? 0 : performance.now());
+  }
+
+  function pointAt(x, y, time) {
+    const drift = reducedMotion.matches ? 0 : 1;
+    let px = x + drift * (Math.sin(time * .00059 + y * .018) * 5 + Math.cos(time * .00037 + x * .016) * 3);
+    let py = y + drift * (Math.cos(time * .00047 + x * .021) * 6 + Math.sin(time * .00032 + y * .014) * 3);
+    if (pointer.strength > .005) {
+      const dx = px - pointer.x;
+      const dy = py - pointer.y;
+      const distance = Math.hypot(dx, dy) || 1;
+      const force = Math.max(0, 1 - distance / 170);
+      px += dx / distance * force * force * 28 * pointer.strength;
+      py += dy / distance * force * force * 28 * pointer.strength;
+    }
+    return [px, py];
+  }
+
+  function draw(time) {
+    context.clearRect(0, 0, width, height);
+    const spacing = width < 420 ? 32 : 38;
+    const columns = Math.ceil(width / spacing) + 1;
+    const rows = Math.ceil(height / spacing) + 1;
+    const field = [];
+    for (let row = 0; row < rows; row++) {
+      const line = [];
+      for (let col = 0; col < columns; col++) line.push(pointAt(col * spacing, row * spacing, time));
+      field.push(line);
+    }
+
+    context.lineWidth = 1;
+    context.strokeStyle = 'rgba(133, 230, 157, .18)';
+    for (const line of field) {
+      context.beginPath();
+      line.forEach(([x, y], index) => index ? context.lineTo(x, y) : context.moveTo(x, y));
+      context.stroke();
+    }
+    context.strokeStyle = 'rgba(133, 230, 157, .13)';
+    for (let col = 0; col < columns; col++) {
+      context.beginPath();
+      field.forEach((line, index) => {
+        const [x, y] = line[col];
+        index ? context.lineTo(x, y) : context.moveTo(x, y);
+      });
+      context.stroke();
+    }
+
+    field.forEach((line, row) => line.forEach(([x, y], col) => {
+      const shimmer = reducedMotion.matches ? .62 : .53 + .25 * Math.sin(time * .0007 + row * .8 + col * .6);
+      context.beginPath();
+      context.arc(x, y, (row + col) % 4 === 0 ? 1.45 : .8, 0, Math.PI * 2);
+      context.fillStyle = 'rgba(172, 248, 187, ' + shimmer.toFixed(3) + ')';
+      context.fill();
+    }));
+
+    const cx = width * .51;
+    const cy = height * .49;
+    const radius = Math.min(width, height) * .28;
+    context.lineWidth = 1;
+    [1, 1.39].forEach((scale, index) => {
+      context.beginPath();
+      context.ellipse(cx, cy, radius * scale, radius * scale * .82, -.2, .24, Math.PI * (index ? 1.7 : 1.92));
+      context.strokeStyle = index ? 'rgba(153, 229, 169, .14)' : 'rgba(153, 229, 169, .36)';
+      context.stroke();
+    });
+    const points = [[.72, .26], [.24, .49], [.70, .69]];
+    context.lineWidth = 1.3;
+    points.forEach(([nx, ny], index) => {
+      const x = width * nx;
+      const y = height * ny;
+      context.beginPath();
+      context.moveTo(cx, cy);
+      context.quadraticCurveTo((cx + x) / 2 + (index - 1) * 35, (cy + y) / 2 - 30, x, y);
+      context.strokeStyle = index === active ? 'rgba(161, 242, 177, .53)' : 'rgba(139, 225, 155, .23)';
+      context.stroke();
+    });
+    context.beginPath();
+    context.arc(cx, cy, 5 + pulse * 8, 0, Math.PI * 2);
+    context.fillStyle = 'rgba(177, 251, 190, .88)';
+    context.fill();
+    context.beginPath();
+    context.arc(cx, cy, 22 + pulse * 53, 0, Math.PI * 2);
+    context.strokeStyle = 'rgba(153, 229, 169, ' + (.24 + pulse * .38).toFixed(3) + ')';
+    context.stroke();
+  }
+
+  function tick(time) {
+    frame = 0;
+    if (!visible || document.hidden || reducedMotion.matches) return;
+    if (time - last >= 30) {
+      last = time;
+      pointer.strength += (pointer.target - pointer.strength) * .12;
+      pulse *= .9;
+      draw(time);
+    }
+    frame = requestAnimationFrame(tick);
+  }
+  function start() {
+    if (visible && !document.hidden && !reducedMotion.matches && !frame) frame = requestAnimationFrame(tick);
+  }
+  function stop() {
+    cancelAnimationFrame(frame);
+    frame = 0;
+  }
+
+  lab.addEventListener('pointermove', event => {
+    if (reducedMotion.matches) return;
+    const rect = lab.getBoundingClientRect();
+    pointer.x = event.clientX - rect.left;
+    pointer.y = event.clientY - rect.top;
+    pointer.target = 1;
+    start();
+  });
+  lab.addEventListener('pointerleave', () => { pointer.target = 0; });
+  lab.addEventListener('pointerdown', event => {
+    const rect = lab.getBoundingClientRect();
+    pointer.x = event.clientX - rect.left;
+    pointer.y = event.clientY - rect.top;
+    pointer.target = reducedMotion.matches ? 0 : 1;
+    pulse = 1;
+    if (reducedMotion.matches) draw(0);
+  });
+  lab.addEventListener('pointerup', event => {
+    if (event.pointerType === 'touch') pointer.target = 0;
+  });
+  reducedMotion.addEventListener('change', () => {
+    if (reducedMotion.matches) { stop(); pointer.strength = 0; draw(0); }
+    else start();
+  });
+  document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(entries => {
+      visible = entries[0].isIntersecting;
+      visible ? start() : stop();
+    }, { rootMargin: '100px' }).observe(lab);
+  }
+  if ('ResizeObserver' in window) new ResizeObserver(resize).observe(lab);
+  else window.addEventListener('resize', resize);
+  resize();
+  start();
 })();
 </script>
